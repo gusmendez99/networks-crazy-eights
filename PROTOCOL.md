@@ -28,6 +28,7 @@ Messages format, like action & payload
         action: ROOM_JOIN
         payload: {
             username,
+            nickname,
             roomId,
         }
     
@@ -100,3 +101,13 @@ Messages format, like action & payload
     
     Response (all): same (winner can be null)
 
+- [x] Chat Sent:
+
+        action: SEND_MESSAGE
+        payload: {
+            nickname,
+            roomId,
+            message,
+        }
+    
+    Response (all): MESSAGE_SENT, same
