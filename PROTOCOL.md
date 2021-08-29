@@ -58,7 +58,7 @@ Messages format, like action & payload
   
         action: GAME_MOVE
         payload: {
-            card(s),
+            cards,
             roomId,
         }
     
