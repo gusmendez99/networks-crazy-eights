@@ -19,6 +19,7 @@ Messages format, like action & payload
             name,
             owner,
             rounds,
+            max_players
         }
 
     Response: ROOM_CREATED, { roomId }
@@ -57,11 +58,31 @@ Messages format, like action & payload
   
         action: GAME_MOVE
         payload: {
-            card,
+            cards,
             roomId,
         }
     
     Response (all): same
+
+- [x] Request card from pile:
+
+        action: REQUEST_CARD_FROM_PILE
+        payload: {
+         roomId   
+        }
+    Response: CARD_FROM_PILE, { card }
+
+
+- [x] Pass Turn: 
+  
+        action: PASS_TURN
+        payload: {
+            currentPlayer,
+            currentCard,
+        }
+    
+    Response (all): TURN_PASSED, same
+
 
 - [x] Change Turn: 
   
@@ -111,3 +132,11 @@ Messages format, like action & payload
         }
     
     Response (all): MESSAGE_SENT, same
+
+- [x] Error:
+
+        action: ERROR
+        payload: {
+            errorDescription,
+            errorCode
+        }
