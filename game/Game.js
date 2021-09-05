@@ -4,33 +4,86 @@ This class holds the game state and all actions
 that can be made to change from one state to another
 */
 
-import { Deck } from './Deck';
+
+var Deck = require('./Deck.js')
+
+const CARDS_PER_HAND = 8;
 
 class Game {
 
-    constructor(playersQuantity, roomId) {
-        this.gameId=roomId //this is intended to be the roomId because server needs identify different game instances
-        this.deck = new Deck();
-        this.playersQuantity = playersQuantity;
-        this.turns = [...Array(playersQuantity).keys()];
-        this.principleHeap = this.definePrincipalHeapCard();
+    constructor(players, roomId) {
+        /*
+        * Creates a new crazy-8 game given a list of players and a roomId
+        */
+        this.gameId=roomId //this is intended to be the roomId because server needs to identify different game instances
+        this.deck = new Deck;
+        this.players = players;
+        this.playersQuantity = players.length;
+        this.principalHeap = this.definePrincipalHeapCard(); //This is the heap or pile that the playe must put cards over
+        this.currentPlayer = 0;
+        this.currentSuit = '';
+    }
+    
+    deliverCards() {
+        /*
+        * This function returns an an array of 8-lenght arrays 
+        which are the cards for each player in playersQuiantity
+        */
+       const hands4players = new Array();
+       for(let i = 0; i < this.playersQuantity; i++) {
+            let hand = new Array(); 
+            for(let j=0; j < CARDS_PER_HAND; j++) {
+                hand.push(this.deck.card);
+            }
+            hands4players.push(hand);
+       }
+        return hands4players; 
     }
 
     definePrincipalHeapCard() {
-        /*This methods take a card from deck an start the game*/
-        return
+        /*
+        * This function initialize principal heap with a card 
+        selected from deck.
+        */
+        const heap = new Array();
+        heap.push(this.deck.card);
+        return heap;
+    }
+
+    playerTurn() {
+        return this.players[this.currentPlayer];
     }
 
     stackCard(player, card) {
-        return
+        /**
+        * Given a player and a list of cards (this list could be single item list)
+        * it checks if it is the turn of the player and if so, stack the card(s)
+        * on the principal heap.
+        * Returns the last card of principal heap
+         */
+        if (this.players.indexOf(player) === this.currentPlayer) {
+            this.principalHeap.push.apply(this.principalHeap, card);
+            return this.principalHeap.at(-1); 
+        }
+
+        return this.principalHeap.at(-1);
+    
     }
 
-    changeTurn(currentPlayer) {
-        return
+    changeTurn() {
+        /*
+        * Change turn and returns the next player turns
+        */
+        this.currentPlayer = (this.currentPlayer + 1) % this.playersQuantity;
+        return this.players[this.currentPlayer];
     }
 
-    passTurn(currentPlayer) {
-        return
+    passTurn() {
+        /*
+         * Pass turn if you draw 3 cards from deck 
+         */
+        this.changeTurn();
+        return this.players[this.currentPlayer];
     }
 
     gameOver() {
@@ -39,25 +92,43 @@ class Game {
 
     check4Winner(playersHands) {
         /*
-        Checks if there is a player with 0 cards on hand
+        * Checks if there is a player with 0 cards on hand
         */
         return
     }
 
     getCard() {
-        return this.deck.card;
-    }
+        /*
+        * Draw card from deck 
+        * Returns a card or game over if there are no more cards
+         */
+        if(this.deck.length > 0){
+            return this.deck.card;
+        }
 
-    deliverCards() {
-        return //this could be an array of 8-length arrays 
+        this.gameOver();
+        return {};
     }
 
     checkMove(card) {
         /*
-        If card is equal in rank or suit to the card in principal heap
-        then is a valide move, return True, else return False
+        * If list of cards are equal in value or suit to the card in principal heap
+        * then is a valide move, return True, else return False
         */
-        return 
+        const card_val = card[0].value; 
+        //lets check if the list of cards match with game criteria
+        for(let i=0; i < card.length; i ++) {
+            if(card[i].value !== card_val) {
+                return false; //it is not a valid sequence of cards
+            }
+
+            if(card[i].value !== this.principalHeap.at(-1).value && card[i].suit !== this.principalHeap.at(-1).suit) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
     suggestMove(handDeck) {
@@ -67,8 +138,11 @@ class Game {
         return 
     }
 
-
-
-
-
 }
+
+const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
+console.log("Principal heap is: ", g.principalHeap);
+console.log("Delivering cards ... \n",g.deliverCards());
+console.log("Current player is: ", g.playerTurn());
+g.changeTurn();
+console.log("Current player is: ", g.playerTurn());

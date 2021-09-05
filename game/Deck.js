@@ -38,6 +38,8 @@ class Deck {
 
 }
 
+module.exports = Deck;
+
 // d = new Deck();
 // d.scrambleCards();
 // d.scrambleCards();
