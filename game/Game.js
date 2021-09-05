@@ -146,3 +146,7 @@ console.log("Delivering cards ... \n",g.deliverCards());
 console.log("Current player is: ", g.playerTurn());
 g.changeTurn();
 console.log("Current player is: ", g.playerTurn());
+
+
+
+module.exports = Game;
