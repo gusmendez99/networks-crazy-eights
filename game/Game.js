@@ -23,6 +23,15 @@ class Game {
         this.currentPlayer = 0;
         this.currentSuit = '';
     }
+
+    initCardCount(){
+        /*
+        * Creates the cardCount object based on the players array. This object will be used to keep track of the number of cards of each player. 
+        * Since we are initializing the object all players are assigned 8 cards
+        */
+        const cardCount = this.players.reduce((o, player)=> ({...o, [player]: CARDS_PER_HAND}), {})
+        this.cardCount = cardCount 
+    }
     
     deliverCards() {
         /*
@@ -94,7 +103,12 @@ class Game {
         /*
         * Checks if there is a player with 0 cards on hand
         */
-        return
+        for(var [key, value] of Object.entries(this.cardCount)){
+            if(value === 0){
+                return key
+            }
+        }
+        return false
     }
 
     getCard() {
@@ -143,10 +157,16 @@ class Game {
 const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
 console.log("Principal heap is: ", g.principalHeap);
 console.log("Delivering cards ... \n",g.deliverCards());
+g.initCardCount()
+console.log("Initial Card Count ...\n", g.cardCount)
 console.log("Current player is: ", g.playerTurn());
 g.changeTurn();
 console.log("Current player is: ", g.playerTurn());
-
-
+console.log("Is there a winner?: ")
+console.log(g.check4Winner())
+console.log("Changing the amount of cards of Gus to check if function works")
+g.cardCount['Gus'] = 0
+console.log("Is there a winner?: ")
+console.log(g.check4Winner())
 
 module.exports = Game;
