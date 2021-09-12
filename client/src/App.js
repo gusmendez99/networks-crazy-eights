@@ -4,6 +4,10 @@ import iocli from 'socket.io-client'
 import React, {Component} from 'react';
 import { HOST } from './settings';
 
+import { Home } from './pages/home';
+
+import styles from './App.scss';
+
 class App extends Component {
     state = {
         host: HOST,
@@ -29,10 +33,8 @@ class App extends Component {
 
     render() {
         return (
-            <div style={{backgroundColor: this.state.color}}>
-                <button onClick={() => this.send('red')}>Red</button>
-                <button onClick={() => this.send('green')}>Green</button>
-                <button onClick={() => this.send('blue')}>Blue</button>
+            <div className={styles.App}>
+                <Home />
             </div>
         );
     }
