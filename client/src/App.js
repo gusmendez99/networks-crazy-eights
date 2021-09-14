@@ -2,6 +2,13 @@ import iocli from 'socket.io-client'
 
 
 import React, {Component} from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
+  
 import { HOST } from './settings';
 
 import { Home } from './pages/home';
@@ -34,7 +41,11 @@ class App extends Component {
     render() {
         return (
             <div className={styles.App}>
-                <Home />
+                <Router>
+                    <Switch>
+                        <Route exact path="/" component={Home}/>
+                    </Switch>
+                </Router>
             </div>
         );
     }
