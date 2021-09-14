@@ -38,7 +38,8 @@ class Deck {
 
 }
 
-module.exports = Deck;
+export default Deck
+//module.exports = Deck;
 
 // d = new Deck();
 // d.scrambleCards();

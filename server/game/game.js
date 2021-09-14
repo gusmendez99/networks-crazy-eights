@@ -4,8 +4,8 @@ This class holds the game state and all actions
 that can be made to change from one state to another
 */
 
+import Deck  from './deck.js';
 
-var Deck = require('./deck.js')
 
 const CARDS_PER_HAND = 8;
 
@@ -142,18 +142,31 @@ class Game {
 
     }
 
-    suggestMove(handDeck) {
+    suggestMove(playedCard, handDeck) {
         /*
         Checks if there is a multi-card move on a player hand
+        Returns the amount of cards with equal value and the indexes of said cards
         */ 
-        return 
+        const indexes_of_cards = []
+        //check if there is another card in hand with the same value
+        for(let i= 0; i < handDeck.length; i ++){
+            if (handDeck[i].value === playedCard.value && i !== handDeck.indexOf(playedCard)) {
+                //if there is add its index to the array of found cards
+                indexes_of_cards.push(i)
+            }
+        }
+        return [indexes_of_cards.length, indexes_of_cards]
     }
 
 }
 
 const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
 console.log("Principal heap is: ", g.principalHeap);
-console.log("Delivering cards ... \n",g.deliverCards());
+const cards = g.deliverCards()
+console.log("Delivering cards ... \n",cards);
+const [count, possitions] = g.suggestMove(cards[0][0],cards[0])
+console.log("Hey Robs you have the following move...", count, possitions)
+
 g.initCardCount()
 console.log("Initial Card Count ...\n", g.cardCount)
 console.log("Current player is: ", g.playerTurn());
@@ -166,4 +179,5 @@ g.cardCount['Gus'] = 0
 console.log("Is there a winner?: ")
 console.log(g.check4Winner())
 
-module.exports = Game;
+export default Game
+// module.exports = Game;
