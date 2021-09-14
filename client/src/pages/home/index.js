@@ -11,7 +11,7 @@ export const Home = () => {
     return (
         <div className="container">
             <Nav />
-            <Lobby isWithin={false}/>
+            <Registration />
         </div>
         
     )
