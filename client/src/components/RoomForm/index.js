@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+
+import styles from './index.module.scss';
+
 export const RoomForm = () => {
 
     const [roomName, setRoomName] = useState("");
@@ -11,22 +14,26 @@ export const RoomForm = () => {
     }
 
     return(
-        <div>
-            <h1>Create Game</h1>
-            <input 
-                type="text" 
-                value={roomName} 
-                onChange={e => setRoomName(e.target.value)} 
-                placeholder="Room name">
-            </input>
-            <input
-                type="number"
-                value={maxPlayers}
-                onChange={e => setMaxPlayers(e.target.value)}
-                max={5}
-                min={2}>
-            </input>
-            <button onClick={createRoom}>Crate Room</button>
+        <div className={styles.container}>
+            <div className={styles.createGame}>
+                <h1>Create Game</h1>
+                <input 
+                    className={styles.input}
+                    type="text" 
+                    value={roomName} 
+                    onChange={e => setRoomName(e.target.value)} 
+                    placeholder="Room name">
+                </input>
+                <input
+                    className={styles.input}
+                    type="number"
+                    value={maxPlayers}
+                    onChange={e => setMaxPlayers(e.target.value)}
+                    max={5}
+                    min={2}>
+                </input>
+                <button className={styles.btn} onClick={createRoom}>Crate Room</button>
+            </div>
         </div>
     );
 };

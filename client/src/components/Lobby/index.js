@@ -2,6 +2,8 @@ import React from "react";
 
 import { RoomList } from '../RoomList';
 
+import styles from './index.module.scss';
+
 export const Lobby = ({ isWithin = false }) => {
 
    const availableRooms = [
@@ -15,18 +17,21 @@ export const Lobby = ({ isWithin = false }) => {
     }
 
     return(
-        <div>
-            <h1>Lobby</h1>
-            {
-                (availableRooms.length > 0 && !isWithin) ?
-                <RoomList roomList={availableRooms}/> :
-                <p>Could not find any room</p>
-            }
-            {
-                !isWithin && 
-                <button onClick={createNewRoom}>Create Room</button>
-            } 
-    
+        <div className={styles.container}>
+            <div className={styles.lobby}>
+                <h1>Lobby</h1>
+                {
+                    !isWithin ? (
+                        (availableRooms.length > 0) ?
+                        <RoomList roomList={availableRooms}/> :
+                        <p>Could not find any room</p>
+                    ) : <p>Waiting for the host to start ...</p>
+                } 
+                {
+                    !isWithin && 
+                    <button className={styles.btn} onClick={createNewRoom}>Create Room</button>
+                } 
+            </div>
         </div>
     );
 };

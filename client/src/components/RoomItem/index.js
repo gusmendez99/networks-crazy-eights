@@ -1,5 +1,7 @@
 import React  from "react";
 
+import styles from './index.module.scss';
+
 export const RoomItem = ({ room }) => {
     
     const joinGame = () => {
@@ -8,10 +10,10 @@ export const RoomItem = ({ room }) => {
 
     return(
         <tr>
-            <td>{room.roomName}</td>
-            <td>{room.players}</td>
-            <td>{room.host}</td>
-            <td><button onClick={joinGame}>Join Game</button></td>
+            <td className={styles.row}>{room.name}</td>
+            <td className={styles.row}>{room.players}</td>
+            <td className={styles.row}>{room.host}</td>
+            <td className={styles.row}><button classname={styles.joinGame} onClick={joinGame}>Join Game &raquo;</button></td>
         </tr>
     );
 };

@@ -1,0 +1,25 @@
+@import '../../styles/fonts';
+
+.container {
+    font-family: $varela-round;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.logo {
+    padding-top: 2rem;
+    width: auto;
+    height: 75px;
+    box-shadow: gray;
+}
+
+.title {
+    padding: 0;
+    margin: 0;
+    font-size: 3rem;
+    font-weight: bolder;
+}

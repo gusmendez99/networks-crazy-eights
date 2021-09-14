@@ -12,12 +12,14 @@ export const Registration = () => {
     }
 
     return (
-        <div className="container">
-            <h1>¡Welcome!</h1>
-            <p>Please choose a username</p>
-            <div className="">
-                <input type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
-                <button className="mybtn" onClick={handleRegistration} >Start playing</button>
+        <div className={styles.container}>
+            <div className={styles.registration}>
+                <h1>¡Welcome!</h1>
+                <p>Please choose a username</p>
+                <div className="">
+                    <input className={styles.input}type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
+                    <button className={styles.btn} onClick={handleRegistration} >Start playing</button>
+                </div>
             </div>
         </div>
     );
