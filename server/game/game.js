@@ -72,6 +72,7 @@ class Game {
          */
         if (this.players.indexOf(player) === this.currentPlayer) {
             this.principalHeap.push.apply(this.principalHeap, card);
+            this.cardCount[player] -= card.length
             return this.principalHeap.at(-1); 
         }
 
@@ -113,12 +114,19 @@ class Game {
         * Draw card from deck 
         * Returns a card or game over if there are no more cards
          */
-        if(this.deck.length > 0){
+        if(this.deck.cards.length > 0){
+            //add a card to the current player count
+            const currentPlayer = this.playerTurn()
+            this.cardCount[currentPlayer] += 1
             return this.deck.card;
         }
 
         this.gameOver();
         return {};
+    }
+
+    gameOver() {
+        return false
     }
 
     checkMove(card) {
@@ -142,10 +150,11 @@ class Game {
 
     }
 
+    // IMPORTANT, THIS FUNCTION SHOULD BE MOVED TO A DIFERENT MODULE
     suggestMove(playedCard, handDeck) {
         /*
         Checks if there is a multi-card move on a player hand
-        Returns the amount of cards with equal value and the indexes of said cards
+        Returns the amount of cards with the same value as the one being played and the indexes of said cards
         */ 
         const indexes_of_cards = []
         //check if there is another card in hand with the same value
@@ -170,6 +179,9 @@ console.log("Hey Robs you have the following move...", count, possitions)
 g.initCardCount()
 console.log("Initial Card Count ...\n", g.cardCount)
 console.log("Current player is: ", g.playerTurn());
+console.log("Current player is drawing a card")
+g.getCard();
+console.log(g.cardCount)
 g.changeTurn();
 console.log("Current player is: ", g.playerTurn());
 console.log("Is there a winner?: ")
