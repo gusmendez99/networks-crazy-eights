@@ -29,11 +29,4 @@ const App = () => {
     );
 }
 
-    return (
-        <div className={styles.App}>
-            <Home />
-        </div>
-    )
-};
-
 export default App;
