@@ -29,11 +29,11 @@ Messages format, like action & payload
   
         action: ROOM_LEAVE
         payload: {
-            username,
             roomId,
         }
     
-    Response (all): ROOM_LEFT, same
+    Response: ROOM_LEFT, { roomId, username }
+    Response: ROOM_PLAYERS, { roomId, players, ownerId }
 
 - [x] Start Game: 
   

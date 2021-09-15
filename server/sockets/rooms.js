@@ -58,18 +58,23 @@ export const leaveRoom = (socket, { roomId }) => {
         const playerId = socket.id
         const playerRemoved = room.removePlayer(playerId);
         if (playerRemoved) {  
-            const isOwner = playerRemoved.socketId === room.ownerSocketId;          
-            console.log(`Player (${ isOwner ? ' and owner' : ''}) disconnected from room ID ${room.id}: ${playerRemoved.username}`);
+            const { socketId, username } = playerRemoved;
+            const isOwner = socketId === room.ownerSocketId;          
+            socket.leave(room.id);
+            socket.emit(SocketEvents.ROOM_LEFT, { roomId, username });
+            console.log(`Player (${ isOwner ? ' and owner' : ''}) disconnected from room ID ${room.id}: ${username}`);
+            // TODO: Consider assign a random player as the room owner if the current owner left the game & room.players.length > 1 
             if (isOwner) {
                 // Disconnect themselves & all players from current room
                 io.to(room.id).emit(SocketEvents.DISCONNECT);
                 const index = availableRooms.indexOf(room);
                 availableRooms.splice(index, 1)[0];
             } else {
-                const leaveMessage = makeMessage(SERVER_NAME, `${playerRemoved.username} has left the room`)
+                socket.leave(room.id);
+                const leaveMessage = makeMessage(SERVER_NAME, `${username} has left the room`)
                 io.to(room.id).emit(SocketEvents.MESSAGE, leaveMessage);
                 // Send players and room info
-                io.to(room.id).emit(SocketEvents.ROOM_USERS, {
+                io.to(room.id).emit(SocketEvents.ROOM_PLAYERS, {
                     roomId: room.id,
                     players: room.players,
                     ownerId: room.ownerSocketId,

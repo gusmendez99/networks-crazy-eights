@@ -8,9 +8,10 @@ export const SocketEvents = {
     ROOM_CREATE_OR_JOIN: 'room_create_or_join',
     ROOM_CREATED: 'room_created',
     ROOM_LEAVE: 'room_leave',
+    ROOM_LEFT: 'room_left',
     ROOM_PLAYERS: 'room_players',
     GAME_START: 'game_start',
     GAME_FINISHED: 'game_finished',
     MESSAGE: 'message',
-    DISCONNECT: 'disconnect',
+    DISCONNECT: 'dc',
 };
