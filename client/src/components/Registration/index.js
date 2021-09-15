@@ -19,12 +19,15 @@ export const Registration = () => {
     }
 
     return (
-        <div className="container">
-            <h1>¡Welcome!</h1>
-            <div className="">
-                <input type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
-                <input type="text" placeholder="Room ID" value={roomId} onChange={e => setRoomId(e.target.value)}/>
-                <button onClick={() => handleJoinRoom()}>Join Game</button>
+        <div className={styles.container}>
+            <div className={styles.registration}>
+                <h1>¡Welcome!</h1>
+                <p>Please choose a username</p>
+                <div className="">
+                    <input className={styles.input} type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
+                    <input className={styles.input} type="text" placeholder="Room ID" value={roomId} onChange={e => setRoomId(e.target.value)}/>
+                    <button className={styles.btn} onClick={() => handleJoinRoom()}>Join Game</button>
+                </div>
             </div>
         </div>
     );

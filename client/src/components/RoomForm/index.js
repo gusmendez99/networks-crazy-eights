@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, DEFAULT_ROUNDS } from '../../settings';
 
+import styles from './index.module.scss';
 
 export const RoomForm = () => {
     const { mySocket } = useRoom();
@@ -19,10 +20,18 @@ export const RoomForm = () => {
     }
 
     return(
-        <div>
-            <h1>Create Game</h1>
-            <input type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
-            <button onClick={() => createRoom()}>Create Room</button>
+        <div className={styles.container}>
+            <div className={styles.createGame}>
+                <h1>Create Game</h1>
+                <input 
+                    className={styles.input}
+                    type="text" 
+                    value={username} 
+                    onChange={e => setUsername(e.target.value)} 
+                    placeholder="Room name">
+                </input>
+                <button className={styles.btn} onClick={() => createRoom()}>Create Room</button>
+            </div>
         </div>
     );
 };
