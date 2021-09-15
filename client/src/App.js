@@ -12,6 +12,7 @@ import {
 import { HOST } from './settings';
 
 import { Home } from './pages/home';
+import Game from './pages/Game';
 
 import styles from './App.scss';
 
@@ -44,6 +45,8 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route exact path="/" component={Home}/>
+                        <Route exact path="/game" component={Game}/>
+
                     </Switch>
                 </Router>
             </div>
