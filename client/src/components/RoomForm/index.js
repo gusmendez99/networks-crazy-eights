@@ -1,32 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useRoom } from '../../hooks/useRoom';
+import { SocketEvents, DEFAULT_ROUNDS } from '../../settings';
+
 
 export const RoomForm = () => {
-
-    const [roomName, setRoomName] = useState("");
-    const [maxPlayers, setMaxPlayers] = useState(2);
+    const { mySocket } = useRoom();
+    const [username, setUsername] = useState("");
+    const rounds = DEFAULT_ROUNDS;
+    
+    useEffect(() => {
+        
+    }, [mySocket])
 
     const createRoom = () => {
-        //TODO: get the host for create a new room
-        console.log(roomName, maxPlayers)
+        const roomId = uuidv4();
+        mySocket.emit(SocketEvents.ROOM_CREATE_OR_JOIN, { username, roomId, isNew: true, rounds });
     }
 
     return(
         <div>
             <h1>Create Game</h1>
-            <input 
-                type="text" 
-                value={roomName} 
-                onChange={e => setRoomName(e.target.value)} 
-                placeholder="Room name">
-            </input>
-            <input
-                type="number"
-                value={maxPlayers}
-                onChange={e => setMaxPlayers(e.target.value)}
-                max={5}
-                min={2}>
-            </input>
-            <button onClick={createRoom}>Crate Room</button>
+            <input type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
+            <button onClick={() => createRoom()}>Create Room</button>
         </div>
     );
 };

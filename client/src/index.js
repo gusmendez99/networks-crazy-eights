@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { RoomProvider } from './hooks/useRoom';
 import reportWebVitals from './reportWebVitals';
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RoomProvider>
+      <App />
+    </RoomProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

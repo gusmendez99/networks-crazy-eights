@@ -12,28 +12,18 @@ Messages format, like action & payload
 
     Response: USER_REGISTERED, { status }
 
-- [x] Create Room: 
+- [x] Create or Join Room: 
   
-        action: ROOM_CREATE
-        payload: {
-            name,
-            owner,
-            rounds,
-            max_players
-        }
-
-    Response: ROOM_CREATED, { roomId }
-
-- [x] Join Room: 
-  
-        action: ROOM_JOIN
+        action: ROOM_CREATE_OR_JOIN
         payload: {
             username,
-            nickname,
             roomId,
+            isNew,
+            rounds,
         }
-    
-    Response (all): ROOM_JOINED, same
+
+    Response: ROOM_CREATED, { roomId, username }
+    Response: ROOM_PLAYERS, { roomId, players, ownerId }
 
 - [x] Leave Room: 
   
