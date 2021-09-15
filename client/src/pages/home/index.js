@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Registration } from '../../components/Registration';
 import { WaitingRoom } from '../../components/WaitingRoom';
 import { RoomForm } from '../../components/RoomForm';
+import { Nav } from '../../components/Nav';
 
 import "./index.module.scss";
 import { useRoom } from '../../hooks/useRoom';
@@ -48,6 +49,7 @@ export const Home = () => {
 
     return (
         <div className="container">
+            <Nav />
             {
                 room ? (
                     <WaitingRoom />

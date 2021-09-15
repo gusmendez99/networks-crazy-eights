@@ -2,16 +2,19 @@ import React from 'react';
 
 import { RoomItem } from '../RoomItem';
 
+import styles from './index.module.scss';
+
 export const RoomList = ({ roomList }) => {
 
     return(
         <div>
-            <table>
+            <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Room Name</th>
-                        <th>Players</th>
-                        <th>Host</th>
+                        <th className={styles.row}>Room Name</th>
+                        <th className={styles.row}>Players</th>
+                        <th className={styles.row}>Host</th>
+                        <th className={styles.row}></th>
                     </tr>
                 </thead>
                 <tbody>
