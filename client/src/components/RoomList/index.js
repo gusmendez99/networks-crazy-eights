@@ -20,7 +20,7 @@ export const RoomList = ({ roomList }) => {
                 <tbody>
                     {
                     roomList.map(room => (
-                        <RoomItem room={room} />
+                        <RoomItem key={room.id} room={room} />
                     ))
                     }
                 </tbody>
