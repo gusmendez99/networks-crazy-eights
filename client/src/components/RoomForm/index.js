@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useRoom } from '../../hooks/useRoom';
+import { SocketEvents, DEFAULT_ROUNDS } from '../../settings';
 
 import styles from './index.module.scss';
 
 export const RoomForm = () => {
-
-    const [roomName, setRoomName] = useState("");
-    const [maxPlayers, setMaxPlayers] = useState(2);
+    const { mySocket } = useRoom();
+    const [username, setUsername] = useState("");
+    const rounds = DEFAULT_ROUNDS;
+    
+    useEffect(() => {
+        
+    }, [mySocket])
 
     const createRoom = () => {
-        //TODO: get the host for create a new room
-        console.log(roomName, maxPlayers)
+        const roomId = uuidv4();
+        mySocket.emit(SocketEvents.ROOM_CREATE_OR_JOIN, { username, roomId, isNew: true, rounds });
     }
 
     return(
@@ -20,19 +26,11 @@ export const RoomForm = () => {
                 <input 
                     className={styles.input}
                     type="text" 
-                    value={roomName} 
-                    onChange={e => setRoomName(e.target.value)} 
-                    placeholder="Room name">
+                    value={username} 
+                    onChange={e => setUsername(e.target.value)} 
+                    placeholder="Your username">
                 </input>
-                <input
-                    className={styles.input}
-                    type="number"
-                    value={maxPlayers}
-                    onChange={e => setMaxPlayers(e.target.value)}
-                    max={5}
-                    min={2}>
-                </input>
-                <button className={styles.btn} onClick={createRoom}>Crate Room</button>
+                <button className={styles.btn} onClick={() => createRoom()}>Create Room</button>
             </div>
         </div>
     );
