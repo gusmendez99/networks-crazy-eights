@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './index.module.scss';
-import logo from '../../img/card-white.png'
+import logo from '../../assets/img/card-white.png'
 
 export const Nav = () => (
     <div className={styles.container}>

@@ -24,7 +24,7 @@ export const Registration = () => {
                 <h1>¡Welcome!</h1>
                 <p>Please choose a username</p>
                 <div className="">
-                    <input className={styles.input} type="text" placeholder="Name" value={username} onChange={e => setUsername(e.target.value)}/>
+                    <input className={styles.input} type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)}/>
                     <input className={styles.input} type="text" placeholder="Room ID" value={roomId} onChange={e => setRoomId(e.target.value)}/>
                     <button className={styles.btn} onClick={() => handleJoinRoom()}>Join Game</button>
                 </div>

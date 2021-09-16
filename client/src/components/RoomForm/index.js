@@ -28,7 +28,7 @@ export const RoomForm = () => {
                     type="text" 
                     value={username} 
                     onChange={e => setUsername(e.target.value)} 
-                    placeholder="Room name">
+                    placeholder="Your username">
                 </input>
                 <button className={styles.btn} onClick={() => createRoom()}>Create Room</button>
             </div>

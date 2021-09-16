@@ -1,0 +1,105 @@
+
+@import '../../styles/_colors';
+@import '../../styles/fonts';
+@import '../../styles/_mixins';
+
+.container {
+    font-family: $varela-round;
+    color: white;
+    font-size: x-large;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 8rem;
+}
+
+.waitingRoom {
+    padding: 4rem 14rem 6rem 14rem;
+    background-color: $color3;
+    border-radius: 1rem;
+    box-shadow: 4px 8px 8px -3px black;
+}
+
+.actions {
+    margin: 0.5rem;
+}
+
+.players {
+    background-color: white;
+    color: $label;
+    padding: 1rem 2rem;
+    text-align: left;
+
+    .listWrapper {
+        display: flex;
+        flex-direction: row;
+    }
+      
+    .list {
+        background: white;
+        border-radius: 2px;
+        flex: 1;
+        padding: 0px 20px;
+    }
+      
+    .listItem {
+        display: flex;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        
+        &:last-child{
+            border-bottom: none;
+        }
+
+        .playerImage {
+            border-radius: 50%;
+            background-color: #e3e3e3;
+            width: 64px;
+        }
+
+        .itemContent {
+            margin-left: 20px;
+
+            span, p {
+                margin: 0;
+            }
+            
+            span {
+                margin-top: 10px;
+                font-size: medium;
+            }
+            
+            p {
+                margin: 5px 0px;
+                color: #aaa;
+                font-size: small;
+            }
+        }
+
+        .tagContainer {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+
+            .tag {
+                background: $color1;
+	            color: whitesmoke;
+                padding: 8px 10px;
+                border-radius: 10px;
+                font-weight: 600;
+                font-size: 12px;
+                box-shadow: 0 2px 5px $label;
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+.btn {
+    @include btn(green);
+}
+
