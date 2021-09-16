@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 const GameTable = () => {
     
     const cardsInHads = [1,4,8];
+    
     const myDeck = [{suit:"diamonds", value:"3"},
     {suit:"hearts", value:"3"},
     {suit:"spades", value:"3"},
