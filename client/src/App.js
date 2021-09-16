@@ -7,8 +7,10 @@ import {
     Route,
 } from "react-router-dom";
 import { Home } from './pages/home';
+import Game from './pages/Game';
 
 import styles from './App.scss';
+
 
 const App = () => {
     const { setMySocket } = useRoom();
@@ -23,6 +25,7 @@ const App = () => {
             <Router>
                 <Switch>
                     <Route exact path="/" component={Home}/>
+                    <Route exact path="/game" component={Game}/>
                 </Switch>
             </Router>
         </div>
