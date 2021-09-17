@@ -11,6 +11,9 @@ import Game from './pages/Game';
 
 import styles from './App.scss';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => {
     const { setMySocket } = useRoom();
@@ -28,6 +31,7 @@ const App = () => {
                     <Route exact path="/game" component={Game}/>
                 </Switch>
             </Router>
+            <ToastContainer />
         </div>
     );
 }
