@@ -150,6 +150,20 @@ class Game {
 
     }
 
+    distributeCards(cards) {
+        /*
+        Function used to asign the generated hands to each player
+        */
+        let distribution = {}
+        for(let i = 0; i < this.playersQuantity; i ++){
+            distribution = {
+                ...distribution,
+                [this.players[i]] : cards[i]
+            }
+        }
+        return distribution
+    }
+
     // IMPORTANT, THIS FUNCTION SHOULD BE MOVED TO A DIFERENT MODULE
     suggestMove(playedCard, handDeck) {
         /*
@@ -175,7 +189,6 @@ const cards = g.deliverCards()
 console.log("Delivering cards ... \n",cards);
 const [count, possitions] = g.suggestMove(cards[0][0],cards[0])
 console.log("Hey Robs you have the following move...", count, possitions)
-
 g.initCardCount()
 console.log("Initial Card Count ...\n", g.cardCount)
 console.log("Current player is: ", g.playerTurn());
