@@ -11,13 +11,13 @@ import Game from './pages/Game';
 
 import styles from './App.scss';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const App = () => {
     const { setMySocket } = useRoom();
-
+    
     useEffect(() => {
         setMySocket && setMySocket(socket);
         return () => socket.close(); 
@@ -31,7 +31,7 @@ const App = () => {
                     <Route exact path="/game" component={Game}/>
                 </Switch>
             </Router>
-            <ToastContainer />
+            <ToastContainer hideProgressBar={true}/>
         </div>
     );
 }
