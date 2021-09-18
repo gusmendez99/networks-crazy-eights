@@ -11,6 +11,7 @@ io.on(SocketEvents.CONNECT, (socket) => {
     // Room events
     socket.on(SocketEvents.ROOM_CREATE_OR_JOIN, (data) => roomSockets.createOrJoinRoom(socket, data));
     socket.on(SocketEvents.ROOM_LEAVE, (data) => roomSockets.leaveRoom(socket, data));
+    socket.on(SocketEvents.SEND_MESSAGE, (data) => roomSockets.sendChat(socket, data))
 });
 
 server.listen(PORT, () => {

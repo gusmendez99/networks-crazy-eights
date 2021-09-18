@@ -1,4 +1,4 @@
-export const HOST = 'http://192.168.0.6:4000'
+export const HOST = 'http://127.0.0.1:4000'
 export const TIMEOUT = 10000;
 export const DEFAULT_ROUNDS = 1;
 export const MAX_PLAYERS = 7;
@@ -15,4 +15,6 @@ export const SocketEvents = {
     GAME_FINISHED: 'game_finished',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
+    SEND_MESSAGE: 'send_message',
+    MESSAGE_SENT: 'message_sent',
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents } from '../../settings';
 import { getAvatar } from '../../utils';
+import { Chat } from '../Chat';
 
 import styles from './waitingRoom.module.scss';
 
@@ -55,6 +56,7 @@ export const WaitingRoom = () => {
                         </ul>
                     </div>
                 </div>
+                <Chat/>
             </div>
         </div>
     );

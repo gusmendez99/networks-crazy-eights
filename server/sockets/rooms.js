@@ -1,5 +1,6 @@
 import Player from '../models/players.js';
 import Room from '../models/rooms.js';
+import Chat from '../models/chat.js';
 import { io } from './index.js';
 import { SocketEvents, MessageTypes, SERVER_NAME, MAX_PLAYERS, DEFAULT_ROUNDS } from '../settings.js';
 import { makeMessage } from '../utils/index.js';
@@ -84,5 +85,25 @@ export const leaveRoom = (socket, { roomId }) => {
             const errorMessage = makeMessage(SERVER_NAME, `Error on leaving room with ID ${roomId}`, MessageTypes.ERROR);
             socket.emit(SocketEvents.MESSAGE, errorMessage);
         }
+    }
+}
+
+export const sendChat = (socket, { roomId, from,message}) => {
+    
+    let room = findRoomById(roomId);
+    if(!room){
+        const errorMessage = makeMessage(SERVER_NAME, `The chat with ID ${roomId} does not exists. How did you get here?`, MessageTypes.ERROR)
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+    } else {
+        //Send the chat to everyone in the room
+
+        console.log(`Message: ${message}, from: ${from}`)
+        const chat = new Chat(message, from)
+        console.log(chat.createdAt)
+        socket.broadcast.to(room.id).emit(SocketEvents.MESSAGE_SENT, {
+            message: chat.message,
+            from: chat.from,
+            createdAt: chat.createdAt,
+        })
     }
 }
