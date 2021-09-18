@@ -1,8 +1,35 @@
+@import "../../styles/colors";
+@import "../../styles/fonts";
+
 .hand {
-    padding-top: 2rem;
-    height: 300px;
-    width: auto;
-    top: 60px;
-    left: calc(50% - 300px);
     display: flex;
+    left: calc(50% - 300px);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    top: 60px;
+    width: auto;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .cardQty {
+        background: $color3;
+        border-radius: 1.5em;
+        -moz-border-radius: 1.5em;
+        -webkit-border-radius: 1.5em;
+        color: white;
+        display: inline-block;
+        font-size: large;
+        font-weight: bold;
+        font-family: $varela-round;
+        line-height: 3em;
+        margin-left: -2rem;
+        text-align: center;
+        width: 3em; 
+        z-index: 2;
+    }
 }

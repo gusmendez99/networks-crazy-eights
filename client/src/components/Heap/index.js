@@ -5,7 +5,7 @@ import Card from '../Card';
 const Heap = () => {
     return(
         <div>
-            <Card isVisible={false} suit={"hearts"} value={"A"}/>
+            <Card suit={"hearts"} value={"A"}/>
         </div>
     );
 }

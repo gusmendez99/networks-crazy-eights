@@ -6,7 +6,7 @@ import styles from './index.module.scss';
 const BACK_CARD = 'back.png'
 
 export const Card = ({
-    isVisible,
+    isVisible = false,
     suit,
     value
 }) => {
