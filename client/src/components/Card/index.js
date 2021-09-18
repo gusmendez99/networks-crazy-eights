@@ -1,19 +1,37 @@
 import React from 'react';
+import { importFolderImages } from '../../utils';
 
 import styles from './index.module.scss';
 
-export const Card = ({isVisible, suit, value}) => {
+const BACK_CARD = 'back.png'
+
+export const Card = ({
+    isVisible,
+    suit,
+    value
+}) => {
+    const cardImages = importFolderImages(require.context('../../assets/img/cards', false, /\.(png|jpe?g|svg)$/));
+    const suitKey = suit && suit.charAt(0) ? suit.charAt(0).toUpperCase() : undefined;
+    const cardKey = !suitKey ? BACK_CARD : `${suitKey}${value}.png`;
+
+
     return(
-        <div>
+        <div >
             {
                 isVisible && 
-                <div className={styles.card}>{suit}{" "}{value}</div> 
+                <div className={styles.card}>
+                    <img alt="card" src={cardImages[cardKey].default} />
+                </div> 
             }
             {    !isVisible && suit && value &&  
-                <div className={styles.stackCard}>{suit}{" "}{value}</div>  
+                <div className={styles.stackCard}>
+                    <img alt="card" src={cardImages[cardKey].default} />
+                </div>  
             }
             {    !isVisible && !suit && !value &&
-                <div className={styles.cardAdversary}>********</div> 
+                <div className={styles.cardAdversary}>
+                    <img alt="card" src={cardImages[cardKey].default} />
+                </div> 
             }
            
         </div>
