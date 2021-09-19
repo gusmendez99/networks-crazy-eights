@@ -1,7 +1,11 @@
+@import '../../styles/colors';
+@import '../../styles/fonts';
+
 .container {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    font-family: $varela-round;
 }
 
 .players {
@@ -12,12 +16,70 @@
     justify-content: space-around;
 }
 
+.playerHand {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    
+    .listItem {
+        display: flex;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        align-items: center;
+    
+        .playerImage {
+            border-radius: 50%;
+            background-color: #e3e3e3;
+            width: 48px;
+        }
+    
+        .itemContent {
+            margin-left: 20px;
+    
+            span, p {
+                margin: 0;
+            }
+            
+            span {
+                color: white;
+                margin-top: 10px;
+                font-size: medium;
+            }
+            
+            p {
+                margin: 5px 0px;
+                color: #aaa;
+                font-size: small;
+            }
+        }
+    
+        .tagContainer {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+    
+            .tag {
+                background: $color1;
+                color: whitesmoke;
+                padding: 8px 10px;
+                border-radius: 10px;
+                font-weight: 600;
+                font-size: 12px;
+                box-shadow: 0 2px 5px $label;
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+
 .deck {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .myCards {

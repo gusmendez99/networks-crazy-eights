@@ -14,7 +14,7 @@ export const SocketEvents = {
 };
 
 export const SERVER_NAME = "Server";
-export const MAX_PLAYERS = 7;
+export const MAX_PLAYERS = 4;
 export const DEFAULT_ROUNDS = 1;
 export const PORT = 4000;
 
