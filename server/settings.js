@@ -8,6 +8,7 @@ export const SocketEvents = {
     ROOM_PLAYERS: 'room_players',
     GAME_START: 'game_start',
     GAME_FINISHED: 'game_finished',
+    CARD_FROM_PILE: 'card_from_pile',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
 };
