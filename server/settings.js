@@ -11,6 +11,8 @@ export const SocketEvents = {
     CARD_FROM_PILE: 'card_from_pile',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
+    SEND_MESSAGE: 'send_message',
+    MESSAGE_SENT: 'message_sent',
 };
 
 export const SERVER_NAME = "Server";

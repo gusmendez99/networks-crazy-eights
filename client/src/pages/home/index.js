@@ -4,13 +4,13 @@ import { Registration } from '../../components/Registration';
 import { WaitingRoom } from '../../components/WaitingRoom';
 import { RoomForm } from '../../components/RoomForm';
 import { Nav } from '../../components/Nav';
+import { addResponseMessage } from 'react-chat-widget';
 
-import "./index.module.scss";
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents } from '../../settings';
 
 export const Home = () => {
-    const { mySocket, room, setRoom, setPlayers, setIsOwner } = useRoom();
+    const { mySocket, room, setRoom, setPlayers, setIsOwner, chat, setChat } = useRoom();
 
     useEffect(() => {
         // TODO: place this functions inside /sockets folder
@@ -32,11 +32,18 @@ export const Home = () => {
             setRoom(roomId);
         };
 
+        const handleMessageReceived = ({ id, message, from, createdAt }) => {
+            const newMessage = { message, from, createdAt}
+            setChat(prevChat => [...prevChat, newMessage]);
+            addResponseMessage(`${from}: ${message}`, id);
+        };
+
         mySocket.on(SocketEvents.DISCONNECT, handleDisconnect);
         mySocket.on(SocketEvents.ROOM_CREATED, handleRoomCreated);
         mySocket.on(SocketEvents.MESSAGE, handleMessage);
         mySocket.on(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
         mySocket.on(SocketEvents.ROOM_LEFT, handleRoomLeft);
+        mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         
         return () => {
             mySocket.off(SocketEvents.DISCONNECT, handleDisconnect);
@@ -44,6 +51,7 @@ export const Home = () => {
             mySocket.off(SocketEvents.MESSAGE, handleMessage);
             mySocket.off(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
+            mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         } 
     }, [mySocket])
 

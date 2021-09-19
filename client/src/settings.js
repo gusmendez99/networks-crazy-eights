@@ -16,4 +16,6 @@ export const SocketEvents = {
     GAME_FINISHED: 'game_finished',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
+    SEND_MESSAGE: 'send_message',
+    MESSAGE_SENT: 'message_sent',
 };
