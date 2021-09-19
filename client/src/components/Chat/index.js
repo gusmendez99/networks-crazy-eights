@@ -1,35 +1,33 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { useRoom } from "../../hooks/useRoom";
 import { SocketEvents } from "../../settings";
-import { concat, findIndex } from "lodash";
+import { findIndex } from "lodash";
+import { Widget } from 'react-chat-widget';
 
-
+import 'react-chat-widget/lib/styles.css';
 import styles from './index.module.scss';
 
 export const Chat = () => {
-    const {mySocket, room, chat, setChat, players} = useRoom();
-    const [message, setMessage] = useState("")
+    const {mySocket, room, players} = useRoom();
+    const [ownPlayer, setOwnPlayer] = useState(undefined)
 
-    const sendChat = (text) => {
-        const username = players[findIndex(players, ['socketId', mySocket.id])].username
+    useEffect(() => {
+        const myPlayer = players && mySocket ? players[findIndex(players, ['socketId', mySocket.id])] : undefined;
+        setOwnPlayer(myPlayer);
+    }, [players, mySocket])
+
+    const handleNewUserMessage = text => {
+        const username = ownPlayer ? ownPlayer.username : 'Anon.';
         mySocket.emit(SocketEvents.SEND_MESSAGE, {roomId: room, from:username, message: text})
-        setMessage('')
     }
+
     return(
         <div className = {styles.container}>
-            <div className = {styles.chat}>Chat</div>
-            <div>
-                {chat.map(item => (
-                    <div key = {item.createdAt} >{`${item.from}: ${item.message}`}</div>
-                ))}
-            </div>
-            <input
-                placeholder = "Say something..."
-                type="text"
-                value = {message}
-                onChange = {e => setMessage(e.target.value)}
-             />
-            <button onClick = {()=>sendChat(message)}>Send</button>
+            <Widget
+                handleNewUserMessage={handleNewUserMessage}
+                title="Chat"
+                subtitle={room && room.id ? `Room: ${room.id}` : ''}
+            />
         </div>
     )
 }

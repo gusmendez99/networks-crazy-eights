@@ -4,17 +4,7 @@
 
 .container {
     font-family: $varela-round;
-    color: white;
-    font-size: x-large;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding-top: 8rem;
-}
-.chat {
-    background-color: white;
-    color: $label;
-    text-align: left;
+    font-size: medium;
+    color: black;
 }

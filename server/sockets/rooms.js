@@ -96,11 +96,11 @@ export const sendChat = (socket, { roomId, from,message}) => {
         socket.emit(SocketEvents.MESSAGE, errorMessage);
     } else {
         //Send the chat to everyone in the room
-
-        console.log(`Message: ${message}, from: ${from}`)
         const chat = new Chat(message, from)
-        console.log(chat.createdAt)
+        console.log(`Message: ${message}, from: ${from} [${chat.createdAt}]`);
+        // Send message to all room players (not forward any message to me)
         socket.broadcast.to(room.id).emit(SocketEvents.MESSAGE_SENT, {
+            id: chat.id,
             message: chat.message,
             from: chat.from,
             createdAt: chat.createdAt,
