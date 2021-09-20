@@ -7,8 +7,9 @@ import { Nav } from '../../components/Nav';
 
 import "./index.module.scss";
 import { useRoom } from '../../hooks/useRoom';
-import { SocketEvents } from '../../settings';
+import { SocketEvents, MessageTypes } from '../../settings';
 import { socket } from '../../sockets';
+import { toast } from 'react-toastify';
 //node v: 12.22.3
 
 export const Home = () => {
@@ -34,7 +35,38 @@ export const Home = () => {
             setPlayers([]);
             setIsOwner(false);
         }
-        const handleMessage = (message) => console.log(message);
+        const handleMessage = (message) => {
+            switch(message.type) {
+                case MessageTypes.SUCCESS: {
+                    toast.success(message.content);
+                    return;
+                }
+
+                case MessageTypes.INFO: {
+                    toast.info(message.content);
+                    return;
+
+                }
+
+                case MessageTypes.WARNING: {
+                    toast.warn(message.content);
+                    return;
+
+                }
+
+                case MessageTypes.ERROR: {
+                    toast.error(message.content);
+                    return;
+
+                }
+
+                default: {
+                    console.log(message);   
+                    return;
+
+                }
+            }
+        };
         const handleRoomCreated = ({ roomId }) => setRoom(roomId);
         const handleRoomLeft = ({ roomId, username }) => {
             handleDisconnect();
