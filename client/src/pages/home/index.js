@@ -4,8 +4,8 @@ import { Registration } from '../../components/Registration';
 import { WaitingRoom } from '../../components/WaitingRoom';
 import { RoomForm } from '../../components/RoomForm';
 import { Nav } from '../../components/Nav';
+import { addResponseMessage } from 'react-chat-widget';
 
-import "./index.module.scss";
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
 import { socket } from '../../sockets';
@@ -25,7 +25,9 @@ export const Home = () => {
         setMainCard, 
         setTurn, 
         setCurrentSuit, 
-        setWinner } = useRoom();
+        setWinner, 
+        chat,
+        setChat } = useRoom();
 
     useEffect(() => {
         // TODO: place this functions inside /sockets folder
@@ -120,6 +122,12 @@ export const Home = () => {
             setCurrentSuit(newSuit);
         };
 
+        const handleMessageReceived = ({ id, message, from, createdAt }) => {
+            const newMessage = { message, from, createdAt}
+            setChat(prevChat => [...prevChat, newMessage]);
+            addResponseMessage(`${from}: ${message}`, id);
+        };
+
         mySocket.on(SocketEvents.DISCONNECT, handleDisconnect);
         mySocket.on(SocketEvents.ROOM_CREATED, handleRoomCreated);
         mySocket.on(SocketEvents.MESSAGE, handleMessage);
@@ -132,6 +140,7 @@ export const Home = () => {
         mySocket.on(SocketEvents.TURN_PASSED, handleTurnPassed);
         mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
         mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
+        mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         
         return () => {
             mySocket.off(SocketEvents.DISCONNECT, handleDisconnect);
@@ -142,7 +151,11 @@ export const Home = () => {
             mySocket.off(SocketEvents.GAME_START, handleGameStarted);
             mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
             mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
-
+            mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
+            mySocket.off(SocketEvents.TURN_PASSED, handleTurnPassed);
+            mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
+            mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
+            mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         } 
     }, [mySocket])
 

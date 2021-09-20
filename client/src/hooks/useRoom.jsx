@@ -14,6 +14,7 @@ export const RoomProvider = (props) => {
     const [turn, setTurn] = useState(undefined);
     const [currentSuit, setCurrentSuit] = useState(undefined);
     const [winner, setWinner] = useState(undefined);
+    const [chat, setChat] = useState([]);
 
     return (
         <RoomContext.Provider 
@@ -36,6 +37,10 @@ export const RoomProvider = (props) => {
                 setTurn,
                 currentSuit,
                 setCurrentSuit,
+                chat,
+                setChat,
+                winner,
+                setWinner
             }}
         >
             { props.children }
