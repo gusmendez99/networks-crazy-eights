@@ -7,10 +7,27 @@ import { Nav } from '../../components/Nav';
 import { addResponseMessage } from 'react-chat-widget';
 
 import { useRoom } from '../../hooks/useRoom';
-import { SocketEvents } from '../../settings';
+import { SocketEvents, MessageTypes } from '../../settings';
+import { socket } from '../../sockets';
+import { toast } from 'react-toastify';
+//node v: 12.22.3
 
 export const Home = () => {
-    const { mySocket, room, setRoom, setPlayers, setIsOwner, chat, setChat } = useRoom();
+    const { mySocket, 
+        room, 
+        setRoom, 
+        setPlayers, 
+        setIsOwner, 
+        myHand,
+        updateMyHand, 
+        updateRivalsHand, 
+        rivalsHand,
+        setMainCard, 
+        setTurn, 
+        setCurrentSuit, 
+        setWinner, 
+        chat,
+        setChat } = useRoom();
 
     useEffect(() => {
         // TODO: place this functions inside /sockets folder
@@ -20,7 +37,38 @@ export const Home = () => {
             setPlayers([]);
             setIsOwner(false);
         }
-        const handleMessage = (message) => console.log(message);
+        const handleMessage = (message) => {
+            switch(message.type) {
+                case MessageTypes.SUCCESS: {
+                    toast.success(message.content);
+                    return;
+                }
+
+                case MessageTypes.INFO: {
+                    toast.info(message.content);
+                    return;
+
+                }
+
+                case MessageTypes.WARNING: {
+                    toast.warn(message.content);
+                    return;
+
+                }
+
+                case MessageTypes.ERROR: {
+                    toast.error(message.content);
+                    return;
+
+                }
+
+                default: {
+                    console.log(message);   
+                    return;
+
+                }
+            }
+        };
         const handleRoomCreated = ({ roomId }) => setRoom(roomId);
         const handleRoomLeft = ({ roomId, username }) => {
             handleDisconnect();
@@ -30,6 +78,48 @@ export const Home = () => {
             setPlayers(players);
             setIsOwner(ownerId === mySocket.id);
             setRoom(roomId);
+
+        };
+
+        const handleGameStarted = ({ game }) => {
+            updateMyHand([ ...game.myHand]);
+            updateRivalsHand([...game.cardCount]);
+            setMainCard(game.principalHeap.pop());
+            setTurn(game.currentPlayer);
+            setCurrentSuit(game.currentSuit);
+        };
+
+        const handleGameFinished = ({ winner }) => {
+            setWinner(winner);
+        };
+        
+        const handleGameMove = ({ game }) => {
+            updateRivalsHand([...game.cardCount]);
+            setMainCard(game.principalHeap.pop());
+            setTurn(game.currentPlayer);
+            setCurrentSuit(game.currentSuit);
+        };
+
+        const handleCardFromPile = ({ card, game }) => {
+           if (game.currentPlayer == mySocket) { //means its my turn and I get the card
+            updateMyHand([...myHand, card]);
+           }
+           else {
+               updateRivalsHand(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
+           }
+        };
+
+        const handleTurnPassed = ({ currentPlayer }) => {
+            setTurn(currentPlayer);
+            // updateRivalsHand(); not needed because in cardFromPile already updates rivalHands
+        };
+
+        const handleTurnChanged = ({ currentPlayer }) => {
+            setTurn(currentPlayer);
+        };
+
+        const handleSuitChanged = ({ newSuit }) => {
+            setCurrentSuit(newSuit);
         };
 
         const handleMessageReceived = ({ id, message, from, createdAt }) => {
@@ -43,6 +133,13 @@ export const Home = () => {
         mySocket.on(SocketEvents.MESSAGE, handleMessage);
         mySocket.on(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
         mySocket.on(SocketEvents.ROOM_LEFT, handleRoomLeft);
+        mySocket.on(SocketEvents.GAME_STARTED, handleGameStarted);
+        mySocket.on(SocketEvents.GAME_FINISHED, handleGameFinished);
+        mySocket.on(SocketEvents.GAME_MOVE, handleGameMove);
+        mySocket.on(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
+        mySocket.on(SocketEvents.TURN_PASSED, handleTurnPassed);
+        mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
+        mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
         mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         
         return () => {
@@ -51,6 +148,13 @@ export const Home = () => {
             mySocket.off(SocketEvents.MESSAGE, handleMessage);
             mySocket.off(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
+            mySocket.off(SocketEvents.GAME_START, handleGameStarted);
+            mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
+            mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
+            mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
+            mySocket.off(SocketEvents.TURN_PASSED, handleTurnPassed);
+            mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
+            mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
             mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         } 
     }, [mySocket])
