@@ -8,8 +8,8 @@ import { addResponseMessage } from 'react-chat-widget';
 
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
-import { socket } from '../../sockets';
 import { toast } from 'react-toastify';
+import GameTable from '../../components/GameTable';
 //node v: 12.22.3
 
 export const Home = () => {
@@ -81,12 +81,13 @@ export const Home = () => {
 
         };
 
-        const handleGameStarted = ({ game }) => {
-            updateMyHand([ ...game.myHand]);
-            updateRivalsHand([...game.cardCount]);
-            setMainCard(game.principalHeap.pop());
-            setTurn(game.currentPlayer);
-            setCurrentSuit(game.currentSuit);
+        const handleGameStarted = (gameState) => {
+            const { hand, cardCount, principalHeap, currentPlayer, currentSuit } = gameState;
+            updateMyHand([ ...hand]);
+            updateRivalsHand(Object.entries(cardCount).map(([player, value]) => ({ player, value })));
+            setMainCard(principalHeap.pop());
+            setTurn(currentPlayer);
+            setCurrentSuit(currentSuit);
         };
 
         const handleGameFinished = ({ winner }) => {
@@ -148,7 +149,7 @@ export const Home = () => {
             mySocket.off(SocketEvents.MESSAGE, handleMessage);
             mySocket.off(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
-            mySocket.off(SocketEvents.GAME_START, handleGameStarted);
+            mySocket.off(SocketEvents.GAME_STARTED, handleGameStarted);
             mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
             mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
             mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
@@ -164,7 +165,7 @@ export const Home = () => {
             <Nav />
             {
                 room ? (
-                    <WaitingRoom />
+                    myHand ? <GameTable /> : <WaitingRoom />
                 ) : (
                     <>
                         <Registration />

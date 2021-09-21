@@ -7,6 +7,7 @@ export const SocketEvents = {
     ROOM_LEFT: 'room_left',
     ROOM_PLAYERS: 'room_players',
     GAME_START: 'game_start',
+    GAME_STARTED: 'game_started',
     GAME_FINISHED: 'game_finished',
     CARD_FROM_PILE: 'card_from_pile',
     MESSAGE: 'message',

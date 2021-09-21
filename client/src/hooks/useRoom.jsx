@@ -8,7 +8,7 @@ export const RoomProvider = (props) => {
     const [room, setRoom] = useState(undefined);
     const [isOwner, setIsOwner] = useState(false);
     const [players, setPlayers] = useState([]);
-    const [myHand, updateMyHand] = useState([]);
+    const [myHand, updateMyHand] = useState(undefined);
     const [rivalsHands, updateRivalsHand] = useState([]);
     const [mainCard, setMainCard] = useState(undefined);
     const [turn, setTurn] = useState(undefined);

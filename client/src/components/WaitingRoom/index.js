@@ -13,6 +13,10 @@ export const WaitingRoom = () => {
         mySocket.emit(SocketEvents.ROOM_LEAVE, { roomId: room })
     }
 
+    const startGame = () => {
+        mySocket.emit(SocketEvents.GAME_START, { roomId: room })
+    }
+
     return(
         <div className={styles.container}>
             <div className={styles.waitingRoom}>
@@ -21,7 +25,7 @@ export const WaitingRoom = () => {
                 <div className={styles.actions}>
                     {
                         isOwner && (
-                            <button className={styles.btn} onClick={() => console.log('Start game')}> Start Game </button>
+                            <button className={styles.btn} onClick={() => startGame()}> Start Game </button>
                         )
                     }
                     <button className={styles.btn} onClick={() => leaveRoom()}> Leave room </button>
