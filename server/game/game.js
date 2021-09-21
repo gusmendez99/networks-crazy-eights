@@ -63,6 +63,12 @@ class Game {
         return this.players[this.currentPlayer];
     }
 
+    principalHeapCard() {
+        const card = this.principalHeap.pop();
+        this.principalHeap.push(card);
+        return card;
+    }
+
     stackCard(player, card) {
         /**
         * Given a player and a list of cards (this list could be single item list)
@@ -203,6 +209,12 @@ console.log("Changing the amount of cards of Gus to check if function works")
 g.cardCount['Gus'] = 0
 console.log("Is there a winner?: ")
 console.log(g.check4Winner())
+console.log(g.players);
+console.log(g.cardCount);
+console.log(g.principalHeapCard());
+console.log(g.principalHeapCard());
+console.log(g.principalHeapCard());
+
 
 export default Game
 // module.exports = Game;

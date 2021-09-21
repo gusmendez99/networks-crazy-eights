@@ -21,7 +21,7 @@ export const WaitingRoom = () => {
                 <div className={styles.actions}>
                     {
                         isOwner && (
-                            <button className={styles.btn} onClick={() => console.log('Start game')}> Start Game </button>
+                            <button className={styles.btn} onClick={() => console.log("Game start")}> Start Game </button>
                         )
                     }
                     <button className={styles.btn} onClick={() => leaveRoom()}> Leave room </button>

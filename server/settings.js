@@ -7,12 +7,17 @@ export const SocketEvents = {
     ROOM_LEFT: 'room_left',
     ROOM_PLAYERS: 'room_players',
     GAME_START: 'game_start',
+    GAME_STARTED: 'game_started',
     GAME_FINISHED: 'game_finished',
     CARD_FROM_PILE: 'card_from_pile',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
     SEND_MESSAGE: 'send_message',
     MESSAGE_SENT: 'message_sent',
+    TURN_CHANGE: 'turn_change',
+    TURN_CHANGED: 'turn_changed',
+    TURN_PASS: 'turn_pass',
+    TURN_PASSED: 'turn_passed',
 };
 
 export const SERVER_NAME = "Server";

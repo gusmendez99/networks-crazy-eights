@@ -20,7 +20,7 @@ export const SocketEvents = {
     GAME_MOVE: 'game_move',
     REQUEST_CARD_FROM_PILE: 'request_card_from_pile',
     CARD_FROM_PILE: 'card_from_pile',
-    PASS_TURN: 'pass_turn',
+    TURN_PASS: 'turn_pass',
     TURN_PASSED: 'turn_passed',
     TURN_CHANGE: 'turn_change',
     TURN_CHANGED: 'turn_changed',

@@ -17,6 +17,7 @@ export const RoomForm = () => {
     const createRoom = () => {
         const roomId = uuidv4();
         mySocket.emit(SocketEvents.ROOM_CREATE_OR_JOIN, { username, roomId, isNew: true, rounds });
+        
     }
 
     return(

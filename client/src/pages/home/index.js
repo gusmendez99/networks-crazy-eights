@@ -24,6 +24,7 @@ export const Home = () => {
         rivalsHand,
         setMainCard, 
         setTurn, 
+        turn,
         setCurrentSuit, 
         setWinner, 
         chat,
@@ -82,11 +83,12 @@ export const Home = () => {
         };
 
         const handleGameStarted = ({ game }) => {
-            updateMyHand([ ...game.myHand]);
-            updateRivalsHand([...game.cardCount]);
-            setMainCard(game.principalHeap.pop());
-            setTurn(game.currentPlayer);
-            setCurrentSuit(game.currentSuit);
+            // updateMyHand([ ...game.myHand]);
+            // updateRivalsHand([...game.cardCount]);
+            // setMainCard(game.principalHeap.pop());
+            // setTurn(game.currentPlayer);
+            // setCurrentSuit(game.currentSuit);
+            console.log("Game started!");
         };
 
         const handleGameFinished = ({ winner }) => {
@@ -110,12 +112,14 @@ export const Home = () => {
         };
 
         const handleTurnPassed = ({ currentPlayer }) => {
-            setTurn(currentPlayer);
+            setTurn(currentPlayer.username);
+            toast.info(`Current player has passed now it's turn for ${turn}`);
             // updateRivalsHand(); not needed because in cardFromPile already updates rivalHands
         };
 
         const handleTurnChanged = ({ currentPlayer }) => {
-            setTurn(currentPlayer);
+            setTurn(currentPlayer.username);
+            
         };
 
         const handleSuitChanged = ({ newSuit }) => {
@@ -141,6 +145,7 @@ export const Home = () => {
         mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
         mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
         mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
+
         
         return () => {
             mySocket.off(SocketEvents.DISCONNECT, handleDisconnect);
@@ -148,7 +153,7 @@ export const Home = () => {
             mySocket.off(SocketEvents.MESSAGE, handleMessage);
             mySocket.off(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
-            mySocket.off(SocketEvents.GAME_START, handleGameStarted);
+            mySocket.off(SocketEvents.GAME_STARTED, handleGameStarted);
             mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
             mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
             mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
@@ -157,7 +162,7 @@ export const Home = () => {
             mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
             mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
         } 
-    }, [mySocket])
+    }, [mySocket, turn])
 
     return (
         <div className="container">

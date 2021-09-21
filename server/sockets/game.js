@@ -5,7 +5,7 @@ import { makeMessage } from '../utils/index.js'
 
 // Runtime persistence
 const availableGames = []
-export const findGameById = id => availableGames.find(game => game.id === id);
+export const findGameById = id => availableGames.find(game => game.gameId === id);
 
 export const startGame = (socket, {roomId, players}) => {
     
@@ -27,11 +27,12 @@ export const startGame = (socket, {roomId, players}) => {
         
         // Send game state and hand to each player
         game.players.map( player => 
-            io.to(player.socketId).emit(SocketEvents.GAME_START, {
+            io.to(player.socketId).emit(SocketEvents.GAME_STARTED, {
             ...game,
             hand: cardDistribution[player.username]
             })
         )
+
     }
 }
 
@@ -49,3 +50,44 @@ export const drawCard = (socket, {roomId}) => {
         io.to(currentPlayerId).emit(SocketEvents.CARD_FROM_PILE, {card})
     }
 }
+
+//This function should be call after a move ... 
+export const changeTurn = (socket, { roomId }) => { 
+
+    const game = findGameById(roomId);
+
+    if(!game) {
+        const errorMessage = makeMessage(SERVER_NAME, `change turn Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+    } else {
+        //change turn in game state
+        game.changeTurn();
+        const currentPlayer = game.playerTurn();
+        //send currentPlayer updated and current card
+        game.players.map( player => 
+            io.to(player.socketId).emit(SocketEvents.TURN_CHANGED, { 
+                currentPlayer : currentPlayer, 
+                currentCard: game.principalHeapCard()})
+        )
+    }
+
+};
+
+export const passTurn = (socket, { roomId }) => {
+
+    const game = findGameById(roomId);
+
+    if (!game) {
+        const errorMessage = makeMessage(SERVER_NAME, `change turn Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage); 
+    } else {
+        //passTurn
+        const currentPlayer = game.passTurn();
+        //send currentPlayer updated and current card
+        game.players.map( player => 
+            io.to(player.socketId).emit(SocketEvents.TURN_PASSED, { 
+                currentPlayer : currentPlayer, 
+                currentCard: game.principalHeapCard()})
+        )
+    }
+};
