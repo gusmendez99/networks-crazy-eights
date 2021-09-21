@@ -117,7 +117,7 @@ class Game {
         if(this.deck.cards.length > 0){
             //add a card to the current player count
             const currentPlayer = this.playerTurn()
-            this.cardCount[currentPlayer] += 1
+            //this.cardCount[currentPlayer] += 1
             return this.deck.card;
         }
 

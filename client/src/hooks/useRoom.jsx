@@ -9,6 +9,7 @@ export const RoomProvider = (props) => {
     const [isOwner, setIsOwner] = useState(false);
     const [players, setPlayers] = useState([])
     const [chat, setChat] = useState([])
+    const [myCards, setMyCards] = useState([])
 
     return (
         <RoomContext.Provider 
@@ -23,6 +24,8 @@ export const RoomProvider = (props) => {
                 setIsOwner,
                 chat,
                 setChat,
+                myCards,
+                setMyCards,
             }}
         >
             { props.children }

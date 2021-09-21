@@ -6,20 +6,25 @@ import Heap from '../Heap';
 import { getAvatar } from '../../utils';
 
 import styles from './index.module.scss';
+import { useRoom } from '../../hooks/useRoom';
+import { SocketEvents } from '../../settings';
 
 const GameTable = () => {
-    
+    const {mySocket, myCards} = useRoom();
+
+
     const opponentsHands = [3, 5, 8];
     
-    const myDeck = [{suit:"diamonds", value:"3"},
-    {suit:"hearts", value:"3"},
-    {suit:"spades", value:"3"},
-    {suit:"hearts", value:"3"},
-    {suit:"hearts", value:"3"},
-    {suit:"hearts", value:"3"},
-    {suit:"hearts", value:"3"},
-    {suit:"hearts", value:"3"},
-];
+    // const myDeck = [{suit:"diamonds", value:"3"},
+    // {suit:"hearts", value:"3"},
+    // {suit:"spades", value:"3"},
+    // {suit:"hearts", value:"3"},
+    // {suit:"hearts", value:"3"},
+    // {suit:"hearts", value:"3"},
+    // {suit:"hearts", value:"3"},
+    // {suit:"hearts", value:"3"},
+// ];
+    const myDeck = myCards
 
     return (
         <div className={styles.container}>

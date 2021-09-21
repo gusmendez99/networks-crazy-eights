@@ -5,6 +5,7 @@ import { makeMessage } from '../utils/index.js'
 
 // Runtime persistence
 const availableGames = []
+//GAME MADE WITH THE IDEA OF TESTIG
 export const findGameById = id => availableGames.find(game => game.id === id);
 
 export const startGame = (socket, {roomId, players}) => {
@@ -36,11 +37,23 @@ export const startGame = (socket, {roomId, players}) => {
 }
 
 export const drawCard = (socket, {roomId}) => {
-    const game = findGameById(roomId)
+    console.log("HEY SOMEONE WANTS A CARD")
+    let game = findGameById(roomId)
     if(!game){
-        const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
-        socket.emit(SocketEvents.MESSAGE, errorMessage);
+        console.log(`How did ${socket.id} got here?`)
+        // const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        // socket.emit(SocketEvents.MESSAGE, errorMessage);
+        
+        /* THIS IS USED FOR TESTING THIS FUNCTION IN A VOID, WHEN IN THE REAL GAME ERASE THE LINES UNDER THIS COMMENT
+        AND UNCOMMENT THE LINES ABOVE  
+        */
+        game = new Game([],'000') 
+        const card = game.getCard()
+        console.log(card)
+        const result = io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {card})
+        console.log(result)
     } else {
+        console.log("GOOD TO GO")
         const currentPlayer = game.playerTurn()
         const currentPlayerId = currentPlayer.socketId
         const card = game.getCard()
