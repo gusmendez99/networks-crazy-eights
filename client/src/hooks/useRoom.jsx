@@ -7,9 +7,15 @@ export const RoomProvider = (props) => {
     const [mySocket, setMySocket] = useState(socket);
     const [room, setRoom] = useState(undefined);
     const [isOwner, setIsOwner] = useState(false);
-    const [players, setPlayers] = useState([])
-    const [chat, setChat] = useState([])
-    const [myCards, setMyCards] = useState([])
+    const [players, setPlayers] = useState([]);
+    const [myHand, updateMyHand] = useState(undefined);
+    const [rivalsHands, updateRivalsHands] = useState([]);
+    const [mainCard, setMainCard] = useState(undefined);
+    const [turn, setTurn] = useState(undefined);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [currentSuit, setCurrentSuit] = useState(undefined);
+    const [winner, setWinner] = useState(undefined);
+    const [chat, setChat] = useState([]);
 
     return (
         <RoomContext.Provider 
@@ -22,10 +28,22 @@ export const RoomProvider = (props) => {
                 setRoom,
                 isOwner,
                 setIsOwner,
+                myHand,
+                updateMyHand,
+                rivalsHands,
+                updateRivalsHands,
+                mainCard,
+                setMainCard,
+                turn,
+                setTurn,
+                currentSuit,
+                setCurrentSuit,
                 chat,
                 setChat,
-                myCards,
-                setMyCards,
+                winner,
+                setWinner,
+                currentPlayer,
+                setCurrentPlayer,
             }}
         >
             { props.children }

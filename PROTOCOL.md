@@ -3,14 +3,7 @@ Messages format, like action & payload
 
 ## Events & Payloads:
 
-- [x] User Registration: 
-  
-        action: USER_REGISTER
-        payload: {
-            username
-        }
 
-    Response: USER_REGISTERED, { status }
 
 - [x] Create or Join Room: 
   
@@ -42,7 +35,7 @@ Messages format, like action & payload
             roomId
         }
 
-    Response (all): GAME_STARTED, { status, deck, initCard }
+    Response (all): GAME_STARTED, { ...Game, myHand }
 
 - [x] Game Move: 
   
