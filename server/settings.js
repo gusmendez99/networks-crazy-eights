@@ -10,6 +10,7 @@ export const SocketEvents = {
     GAME_STARTED: 'game_started',
     GAME_FINISHED: 'game_finished',
     CARD_FROM_PILE: 'card_from_pile',
+    REQUEST_CARD_FROM_PILE: 'request_card_from_pile',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
     SEND_MESSAGE: 'send_message',
@@ -18,6 +19,7 @@ export const SocketEvents = {
     TURN_CHANGED: 'turn_changed',
     TURN_PASS: 'turn_pass',
     TURN_PASSED: 'turn_passed',
+    OPPONENT_CARD_FROM_PILE: 'opponent_card_from_pile',
 };
 
 export const SERVER_NAME = "Server";

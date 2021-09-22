@@ -8,26 +8,26 @@ import { addResponseMessage } from 'react-chat-widget';
 
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
-import { socket } from '../../sockets';
 import { toast } from 'react-toastify';
+import GameTable from '../../components/GameTable';
 //node v: 12.22.3
 
 export const Home = () => {
     const { mySocket, 
         room, 
-        setRoom, 
+        setRoom,
+        players, 
         setPlayers, 
         setIsOwner, 
         myHand,
-        updateMyHand, 
-        updateRivalsHand, 
-        rivalsHand,
+        updateMyHand,
+        rivalsHands, 
+        updateRivalsHands,
         setMainCard, 
         setTurn, 
         turn,
         setCurrentSuit, 
-        setWinner, 
-        chat,
+        setWinner,
         setChat } = useRoom();
 
     useEffect(() => {
@@ -75,41 +75,53 @@ export const Home = () => {
             handleDisconnect();
         };
         const handleGamePlayersInfo = ({ roomId, players, ownerId }) => {
-            console.log(players, roomId, ownerId)
+            // console.log(players, roomId, ownerId)
             setPlayers(players);
             setIsOwner(ownerId === mySocket.id);
             setRoom(roomId);
 
         };
 
-        const handleGameStarted = ({ game }) => {
-            // updateMyHand([ ...game.myHand]);
-            // updateRivalsHand([...game.cardCount]);
-            // setMainCard(game.principalHeap.pop());
-            // setTurn(game.currentPlayer);
-            // setCurrentSuit(game.currentSuit);
-            console.log("Game started!");
+        const handleGameStarted = (gameState) => {
+            const { hand, cardCount, principalHeap, currentPlayer, currentSuit } = gameState;
+            updateMyHand([ ...hand]);
+            const rivalHands = Object.entries(cardCount).map(([player, value]) => ({ player, value }));
+            // console.log('Rival hands: ', rivalHands);
+            updateRivalsHands([...rivalHands]);
+            setMainCard(principalHeap.pop());
+            setTurn(currentPlayer);
+            setCurrentSuit(currentSuit);
         };
 
         const handleGameFinished = ({ winner }) => {
             setWinner(winner);
         };
         
+        // TODO: Review
         const handleGameMove = ({ game }) => {
-            updateRivalsHand([...game.cardCount]);
+            updateRivalsHands([...game.cardCount]);
             setMainCard(game.principalHeap.pop());
             setTurn(game.currentPlayer);
             setCurrentSuit(game.currentSuit);
         };
 
+        // TODO: Review
         const handleCardFromPile = ({ card, game }) => {
-           if (game.currentPlayer == mySocket) { //means its my turn and I get the card
-            updateMyHand([...myHand, card]);
-           }
-           else {
-               updateRivalsHand(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
-           }
+            updateMyHand(prevHand => [...prevHand, card]);
         };
+
+        const handleOpponentCardFromPile = ({playerId}) => {
+            const playerChanged = players.find(player => player.socketId === playerId)
+            if(playerChanged){
+                const newRivalHands = rivalsHands.map(rival => {
+                    if(rival.player === playerChanged.username) {
+                        return { player: rival.player, value: rival.value +1 }
+                    }
+                    return rival
+                })
+                updateRivalsHands([...newRivalHands]);
+            }         
+        }
 
         const handleTurnPassed = ({ currentPlayer }) => {
             setTurn(currentPlayer.username);
@@ -145,7 +157,7 @@ export const Home = () => {
         mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
         mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
         mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
-
+        mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
         
         return () => {
             mySocket.off(SocketEvents.DISCONNECT, handleDisconnect);
@@ -161,15 +173,17 @@ export const Home = () => {
             mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
             mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
             mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
+            mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
+
         } 
-    }, [mySocket, turn])
+    }, [mySocket, players, rivalsHands, turn])
 
     return (
         <div className="container">
             <Nav />
             {
                 room ? (
-                    <WaitingRoom />
+                    myHand ? <GameTable /> : <WaitingRoom />
                 ) : (
                     <>
                         <Registration />

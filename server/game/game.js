@@ -24,12 +24,14 @@ class Game {
         this.currentSuit = '';
     }
 
+    // TODO: handle when a player leaves the game...
+
     initCardCount(){
         /*
         * Creates the cardCount object based on the players array. This object will be used to keep track of the number of cards of each player. 
         * Since we are initializing the object all players are assigned 8 cards
         */
-        const cardCount = this.players.reduce((o, player)=> ({...o, [player]: CARDS_PER_HAND}), {})
+        const cardCount = this.players.reduce((o, player)=> ({...o, [player.username]: CARDS_PER_HAND}), {})
         this.cardCount = cardCount 
     }
     
@@ -60,7 +62,7 @@ class Game {
     }
 
     playerTurn() {
-        return this.players[this.currentPlayer];
+        return this.players[this.currentPlayer].username;
     }
 
     principalHeapCard() {
@@ -69,16 +71,16 @@ class Game {
         return card;
     }
 
-    stackCard(player, card) {
+    stackCard(playerName, card) {
         /**
-        * Given a player and a list of cards (this list could be single item list)
+        * Given a player name and a list of cards (this list could be single item list)
         * it checks if it is the turn of the player and if so, stack the card(s)
         * on the principal heap.
         * Returns the last card of principal heap
          */
-        if (this.players.indexOf(player) === this.currentPlayer) {
+        if (this.players.findIndex(player => player.username === playerName) === this.currentPlayer) {
             this.principalHeap.push.apply(this.principalHeap, card);
-            this.cardCount[player] -= card.length
+            this.cardCount[playerName] -= card.length
             return this.principalHeap.at(-1); 
         }
 
@@ -91,7 +93,7 @@ class Game {
         * Change turn and returns the next player turns
         */
         this.currentPlayer = (this.currentPlayer + 1) % this.playersQuantity;
-        return this.players[this.currentPlayer];
+        return this.players[this.currentPlayer].username;
     }
 
     passTurn() {
@@ -99,7 +101,7 @@ class Game {
          * Pass turn if you draw 3 cards from deck 
          */
         this.changeTurn();
-        return this.players[this.currentPlayer];
+        return this.players[this.currentPlayer].username;
     }
 
 
@@ -123,7 +125,7 @@ class Game {
         if(this.deck.cards.length > 0){
             //add a card to the current player count
             const currentPlayer = this.playerTurn()
-            this.cardCount[currentPlayer] += 1
+            //this.cardCount[currentPlayer] += 1
             return this.deck.card;
         }
 
@@ -164,7 +166,7 @@ class Game {
         for(let i = 0; i < this.playersQuantity; i ++){
             distribution = {
                 ...distribution,
-                [this.players[i]] : cards[i]
+                [this.players[i].username] : cards[i]
             }
         }
         return distribution
@@ -189,7 +191,7 @@ class Game {
 
 }
 
-const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
+/* const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
 console.log("Principal heap is: ", g.principalHeap);
 const cards = g.deliverCards()
 console.log("Delivering cards ... \n",cards);
@@ -215,6 +217,7 @@ console.log(g.principalHeapCard());
 console.log(g.principalHeapCard());
 console.log(g.principalHeapCard());
 
+console.log(g.check4Winner()) */
 
-export default Game
+export default Game;
 // module.exports = Game;
