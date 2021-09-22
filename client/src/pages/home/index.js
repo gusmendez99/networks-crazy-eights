@@ -8,8 +8,8 @@ import { addResponseMessage } from 'react-chat-widget';
 
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
-import { socket } from '../../sockets';
 import { toast } from 'react-toastify';
+import GameTable from '../../components/GameTable';
 //node v: 12.22.3
 
 export const Home = () => {
@@ -20,13 +20,11 @@ export const Home = () => {
         setIsOwner, 
         myHand,
         updateMyHand, 
-        updateRivalsHand, 
-        rivalsHand,
+        updateRivalsHands,
         setMainCard, 
         setTurn, 
         setCurrentSuit, 
-        setWinner, 
-        chat,
+        setWinner,
         setChat } = useRoom();
 
     useEffect(() => {
@@ -74,39 +72,44 @@ export const Home = () => {
             handleDisconnect();
         };
         const handleGamePlayersInfo = ({ roomId, players, ownerId }) => {
-            console.log(players, roomId, ownerId)
+            // console.log(players, roomId, ownerId)
             setPlayers(players);
             setIsOwner(ownerId === mySocket.id);
             setRoom(roomId);
 
         };
 
-        const handleGameStarted = ({ game }) => {
-            updateMyHand([ ...game.myHand]);
-            updateRivalsHand([...game.cardCount]);
-            setMainCard(game.principalHeap.pop());
-            setTurn(game.currentPlayer);
-            setCurrentSuit(game.currentSuit);
+        const handleGameStarted = (gameState) => {
+            const { hand, cardCount, principalHeap, currentPlayer, currentSuit } = gameState;
+            updateMyHand([ ...hand]);
+            const rivalHands = Object.entries(cardCount).map(([player, value]) => ({ player, value }));
+            // console.log('Rival hands: ', rivalHands);
+            updateRivalsHands([...rivalHands]);
+            setMainCard(principalHeap.pop());
+            setTurn(currentPlayer);
+            setCurrentSuit(currentSuit);
         };
 
         const handleGameFinished = ({ winner }) => {
             setWinner(winner);
         };
         
+        // TODO: Review
         const handleGameMove = ({ game }) => {
-            updateRivalsHand([...game.cardCount]);
+            updateRivalsHands([...game.cardCount]);
             setMainCard(game.principalHeap.pop());
             setTurn(game.currentPlayer);
             setCurrentSuit(game.currentSuit);
         };
 
+        // TODO: Review
         const handleCardFromPile = ({ card, game }) => {
-           if (game.currentPlayer == mySocket) { //means its my turn and I get the card
-            updateMyHand([...myHand, card]);
-           }
-           else {
-               updateRivalsHand(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
-           }
+            if (game.currentPlayer === mySocket) { //means its my turn and I get the card
+                updateMyHand([...myHand, card]);
+            }
+            else {
+                updateRivalsHands(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
+            }
         };
 
         const handleTurnPassed = ({ currentPlayer }) => {
@@ -148,7 +151,7 @@ export const Home = () => {
             mySocket.off(SocketEvents.MESSAGE, handleMessage);
             mySocket.off(SocketEvents.ROOM_PLAYERS, handleGamePlayersInfo);
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
-            mySocket.off(SocketEvents.GAME_START, handleGameStarted);
+            mySocket.off(SocketEvents.GAME_STARTED, handleGameStarted);
             mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
             mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
             mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
@@ -164,7 +167,7 @@ export const Home = () => {
             <Nav />
             {
                 room ? (
-                    <WaitingRoom />
+                    myHand ? <GameTable /> : <WaitingRoom />
                 ) : (
                     <>
                         <Registration />

@@ -8,10 +8,11 @@ export const RoomProvider = (props) => {
     const [room, setRoom] = useState(undefined);
     const [isOwner, setIsOwner] = useState(false);
     const [players, setPlayers] = useState([]);
-    const [myHand, updateMyHand] = useState([]);
-    const [rivalsHands, updateRivalsHand] = useState([]);
+    const [myHand, updateMyHand] = useState(undefined);
+    const [rivalsHands, updateRivalsHands] = useState([]);
     const [mainCard, setMainCard] = useState(undefined);
     const [turn, setTurn] = useState(undefined);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
     const [currentSuit, setCurrentSuit] = useState(undefined);
     const [winner, setWinner] = useState(undefined);
     const [chat, setChat] = useState([]);
@@ -30,7 +31,7 @@ export const RoomProvider = (props) => {
                 myHand,
                 updateMyHand,
                 rivalsHands,
-                updateRivalsHand,
+                updateRivalsHands,
                 mainCard,
                 setMainCard,
                 turn,
@@ -40,7 +41,9 @@ export const RoomProvider = (props) => {
                 chat,
                 setChat,
                 winner,
-                setWinner
+                setWinner,
+                currentPlayer,
+                setCurrentPlayer,
             }}
         >
             { props.children }
