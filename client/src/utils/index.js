@@ -11,6 +11,7 @@ export const AVATARS = [
 ]
 
 export const getAvatar = idx => {
+    if (idx === -1) return AVATARS[0];
     return idx < AVATARS.length ? AVATARS[idx] : AVATARS[0];
 }
 
@@ -19,4 +20,10 @@ export const importFolderImages = r => {
     let images = {};
     r.keys().forEach((item, index) => { images[item.replace('./', '')] = r(item); });
     return images;
+}
+
+export const arrayRotate = (arr, count) => {
+    count -= arr.length * Math.floor(count / arr.length);
+    arr.push.apply(arr, arr.splice(0, count));
+    return arr;
 }

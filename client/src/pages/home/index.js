@@ -20,13 +20,11 @@ export const Home = () => {
         setIsOwner, 
         myHand,
         updateMyHand, 
-        updateRivalsHand, 
-        rivalsHand,
+        updateRivalsHands,
         setMainCard, 
         setTurn, 
         setCurrentSuit, 
-        setWinner, 
-        chat,
+        setWinner,
         setChat } = useRoom();
 
     useEffect(() => {
@@ -74,7 +72,7 @@ export const Home = () => {
             handleDisconnect();
         };
         const handleGamePlayersInfo = ({ roomId, players, ownerId }) => {
-            console.log(players, roomId, ownerId)
+            // console.log(players, roomId, ownerId)
             setPlayers(players);
             setIsOwner(ownerId === mySocket.id);
             setRoom(roomId);
@@ -84,7 +82,9 @@ export const Home = () => {
         const handleGameStarted = (gameState) => {
             const { hand, cardCount, principalHeap, currentPlayer, currentSuit } = gameState;
             updateMyHand([ ...hand]);
-            updateRivalsHand(Object.entries(cardCount).map(([player, value]) => ({ player, value })));
+            const rivalHands = Object.entries(cardCount).map(([player, value]) => ({ player, value }));
+            // console.log('Rival hands: ', rivalHands);
+            updateRivalsHands([...rivalHands]);
             setMainCard(principalHeap.pop());
             setTurn(currentPlayer);
             setCurrentSuit(currentSuit);
@@ -94,20 +94,22 @@ export const Home = () => {
             setWinner(winner);
         };
         
+        // TODO: Review
         const handleGameMove = ({ game }) => {
-            updateRivalsHand([...game.cardCount]);
+            updateRivalsHands([...game.cardCount]);
             setMainCard(game.principalHeap.pop());
             setTurn(game.currentPlayer);
             setCurrentSuit(game.currentSuit);
         };
 
+        // TODO: Review
         const handleCardFromPile = ({ card, game }) => {
-           if (game.currentPlayer == mySocket) { //means its my turn and I get the card
-            updateMyHand([...myHand, card]);
-           }
-           else {
-               updateRivalsHand(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
-           }
+            if (game.currentPlayer === mySocket) { //means its my turn and I get the card
+                updateMyHand([...myHand, card]);
+            }
+            else {
+                updateRivalsHands(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
+            }
         };
 
         const handleTurnPassed = ({ currentPlayer }) => {
