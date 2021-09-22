@@ -71,6 +71,13 @@ export const drawCard = (socket, {roomId}) => {
         //Send the player the drawn card
         io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {game,card})
         socket.broadcast.to(roomId).emit(SocketEvents.OPPONENT_CARD_FROM_PILE, {playerId})
+
+        const limit = game.updateCardLimit(playerId);
+        if(limit[1] === 3){
+            passTurn(socket, { roomId });
+        }
+
+        // changeTurn(socket, { roomId });
     }
 }
 
@@ -84,6 +91,7 @@ export const changeTurn = (socket, { roomId }) => {
         socket.emit(SocketEvents.MESSAGE, errorMessage);
     } else {
         //change turn in game state
+        game.resetCardLimit(); // it means that a player stacked a card
         game.changeTurn();
         const currentPlayer = game.playerTurn();
         //send currentPlayer updated and current card
@@ -105,6 +113,7 @@ export const passTurn = (socket, { roomId }) => {
         socket.emit(SocketEvents.MESSAGE, errorMessage); 
     } else {
         //passTurn
+        game.resetCardLimit(); // the current player reach the limit so we have to reset it
         const currentPlayer = game.passTurn();
         //send currentPlayer updated and current card
         game.players.map( player => 

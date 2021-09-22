@@ -15,6 +15,7 @@ const GameTable = () => {
         rivalsHands,
         players,
         mySocket,
+        currentPlayer,
     } = useRoom();
     // Definition > opponentsHands = [{ cardsCount, player }, ...]
     const [opponentsHands, setOpponentsHands] = useState(undefined)
@@ -54,7 +55,7 @@ const GameTable = () => {
                             <div className={styles.listItem}>
                                 <div>
                                     <img
-                                        className={styles.playerImage}
+                                        className={players.indexOf(player) === currentPlayer ? styles.playerImageActive : styles.playerImage}
                                         src={getAvatar(players.indexOf(player))} 
                                         alt="player"
                                     />
@@ -80,7 +81,7 @@ const GameTable = () => {
                     <div className={styles.listItem}>
                         <div>
                             <img
-                                className={styles.playerImage}
+                                className={players.indexOf(myPlayer) === currentPlayer ? styles.playerImageActive : styles.playerImage}
                                 src={getAvatar(players.indexOf(myPlayer))} 
                                 alt="player"
                             />

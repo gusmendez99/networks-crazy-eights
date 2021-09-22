@@ -22,6 +22,21 @@ class Game {
         this.principalHeap = this.definePrincipalHeapCard(); //This is the heap or pile that the playe must put cards over
         this.currentPlayer = 0;
         this.currentSuit = '';
+        this.cardLimit = ["", 0];
+    }
+
+
+    resetCardLimit() {
+        this.cardLimit[0] = "";
+        this.cardLimit[1] = 0;
+        return this.cardLimit;
+    }
+
+
+    updateCardLimit(player) {
+        this.cardLimit[0] = player;
+        this.cardLimit[1] = this.cardLimit[1] +1;
+        return this.cardLimit;
     }
 
     // TODO: handle when a player leaves the game...
@@ -191,33 +206,39 @@ class Game {
 
 }
 
-/* const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
-console.log("Principal heap is: ", g.principalHeap);
-const cards = g.deliverCards()
-console.log("Delivering cards ... \n",cards);
-const [count, possitions] = g.suggestMove(cards[0][0],cards[0])
-console.log("Hey Robs you have the following move...", count, possitions)
-g.initCardCount()
-console.log("Initial Card Count ...\n", g.cardCount)
-console.log("Current player is: ", g.playerTurn());
-console.log("Current player is drawing a card")
-g.getCard();
-console.log(g.cardCount)
-g.changeTurn();
-console.log("Current player is: ", g.playerTurn());
-console.log("Is there a winner?: ")
-console.log(g.check4Winner())
-console.log("Changing the amount of cards of Gus to check if function works")
-g.cardCount['Gus'] = 0
-console.log("Is there a winner?: ")
-console.log(g.check4Winner())
-console.log(g.players);
-console.log(g.cardCount);
-console.log(g.principalHeapCard());
-console.log(g.principalHeapCard());
-console.log(g.principalHeapCard());
+// const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
+// console.log("Principal heap is: ", g.principalHeap);
+// const cards = g.deliverCards()
+// console.log("Delivering cards ... \n",cards);
+// const [count, possitions] = g.suggestMove(cards[0][0],cards[0])
+// console.log("Hey Robs you have the following move...", count, possitions)
+// g.initCardCount()
+// console.log("Initial Card Count ...\n", g.cardCount)
+// console.log("Current player is: ", g.playerTurn());
+// console.log("Current player is drawing a card")
+// g.getCard();
+// console.log(g.cardCount)
+// g.changeTurn();
+// console.log("Current player is: ", g.playerTurn());
+// console.log("Is there a winner?: ")
+// console.log(g.check4Winner())
+// console.log("Changing the amount of cards of Gus to check if function works")
+// g.cardCount['Gus'] = 0
+// console.log("Is there a winner?: ")
+// console.log(g.check4Winner())
+// console.log(g.players);
+// console.log(g.cardCount);
+// console.log(g.principalHeapCard());
+// console.log(g.principalHeapCard());
+// console.log(g.principalHeapCard());
 
-console.log(g.check4Winner()) */
+// console.log(g.check4Winner()) 
+
+// console.log(g.updateCardLimit("Gus"));
+// // it would reset when turn is called
+// console.log(g.updateCardLimit("Rob"));
+// console.log(g.updateCardLimit("Micks"));
+// console.log(g.resetCardLimit());
 
 export default Game;
 // module.exports = Game;
