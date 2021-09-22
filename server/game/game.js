@@ -166,23 +166,6 @@ class Game {
         return distribution
     }
 
-    // IMPORTANT, THIS FUNCTION SHOULD BE MOVED TO A DIFERENT MODULE
-    suggestMove(playedCard, handDeck) {
-        /*
-        Checks if there is a multi-card move on a player hand
-        Returns the amount of cards with the same value as the one being played and the indexes of said cards
-        */ 
-        const indexes_of_cards = []
-        //check if there is another card in hand with the same value
-        for(let i= 0; i < handDeck.length; i ++){
-            if (handDeck[i].value === playedCard.value && i !== handDeck.indexOf(playedCard)) {
-                //if there is add its index to the array of found cards
-                indexes_of_cards.push(i)
-            }
-        }
-        return [indexes_of_cards.length, indexes_of_cards]
-    }
-
 }
 
 /* const g = new Game(["Robs", "Gus", "Micks"], 'someUidhere');
