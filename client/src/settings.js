@@ -15,6 +15,8 @@ export const SocketEvents = {
     GAME_START: 'game_start',
     GAME_STARTED: 'game_started',
     GAME_FINISHED: 'game_finished',
+    CARD_FROM_PILE: 'card_from_pile',
+    REQUEST_CARD_FROM_PILE: 'request_card_from_pile',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
     GAME_MOVE: 'game_move',
@@ -28,6 +30,7 @@ export const SocketEvents = {
     SUIT_CHANGED: 'suit_changed',
     SEND_MESSAGE: 'send_message',
     MESSAGE_SENT: 'message_sent',
+    OPPONENT_CARD_FROM_PILE: 'opponent_card_from_pile',
 };
 
 

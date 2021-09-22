@@ -13,6 +13,9 @@ io.on(SocketEvents.CONNECT, (socket) => {
     socket.on(SocketEvents.ROOM_CREATE_OR_JOIN, (data) => roomSockets.createOrJoinRoom(socket, data));
     socket.on(SocketEvents.ROOM_LEAVE, (data) => roomSockets.leaveRoom(socket, data));
     socket.on(SocketEvents.SEND_MESSAGE, (data) => roomSockets.sendChat(socket, data));
+
+    //Game events
+    socket.on(SocketEvents.REQUEST_CARD_FROM_PILE, (data)=> gameSockets.drawCard(socket, data));
     // Game events
     socket.on(SocketEvents.GAME_START, (data) => gameSockets.startGame(socket, data));
 });
