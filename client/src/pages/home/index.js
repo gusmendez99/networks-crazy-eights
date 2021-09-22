@@ -15,11 +15,13 @@ import GameTable from '../../components/GameTable';
 export const Home = () => {
     const { mySocket, 
         room, 
-        setRoom, 
+        setRoom,
+        players, 
         setPlayers, 
         setIsOwner, 
         myHand,
-        updateMyHand, 
+        updateMyHand,
+        rivalsHands, 
         updateRivalsHands,
         setMainCard, 
         setTurn, 
@@ -104,13 +106,21 @@ export const Home = () => {
 
         // TODO: Review
         const handleCardFromPile = ({ card, game }) => {
-            if (game.currentPlayer === mySocket) { //means its my turn and I get the card
-                updateMyHand([...myHand, card]);
-            }
-            else {
-                updateRivalsHands(game.cardCount); //it updates the cardCount of the rivals hand becuase it is not my turn
-            }
+            updateMyHand(prevHand => [...prevHand, card]);
         };
+
+        const handleOpponentCardFromPile = ({playerId}) => {
+            const playerChanged = players.find(player => player.socketId === playerId)
+            if(playerChanged){
+                const newRivalHands = rivalsHands.map(rival => {
+                    if(rival.player === playerChanged.username) {
+                        return { player: rival.player, value: rival.value +1 }
+                    }
+                    return rival
+                })
+                updateRivalsHands([...newRivalHands]);
+            }         
+        }
 
         const handleTurnPassed = ({ currentPlayer }) => {
             setTurn(currentPlayer);
@@ -144,6 +154,7 @@ export const Home = () => {
         mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
         mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
         mySocket.on(SocketEvents.MESSAGE_SENT, handleMessageReceived);
+        mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
         
         return () => {
             mySocket.off(SocketEvents.DISCONNECT, handleDisconnect);
@@ -159,8 +170,10 @@ export const Home = () => {
             mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
             mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
             mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
+            mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
+
         } 
-    }, [mySocket])
+    }, [mySocket, players, rivalsHands])
 
     return (
         <div className="container">
