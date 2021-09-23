@@ -10,6 +10,7 @@ import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
 import { toast } from 'react-toastify';
 import GameTable from '../../components/GameTable';
+import omit from 'lodash/omit';
 //node v: 12.22.3
 
 export const Home = () => {
@@ -97,12 +98,12 @@ export const Home = () => {
         };
         
         // TODO: Review
-        const handleGameMove = ({ game }) => {
+        /* const handleGameMove = ({ game }) => {
             updateRivalsHands([...game.cardCount]);
             setMainCard(game.principalHeap.pop());
             setTurn(game.currentPlayer);
             setCurrentSuit(game.currentSuit);
-        };
+        }; */
 
         // TODO: Review
         const handleCardFromPile = ({ card, game }) => {
@@ -127,6 +128,29 @@ export const Home = () => {
             // updateRivalsHand(); not needed because in cardFromPile already updates rivalHands
         };
 
+        const handleCardStacked = ({ playerId, cards }) => {
+            const playerChanged = players.find(player => player.socketId === playerId)
+            if (playerChanged) {
+                if (mySocket.id === playerId) {
+                    updateMyHand(prevHand => {
+                        const newHand = [...prevHand].filter(card => !cards.some(({ suit, value }) => {
+                            return card.value === value && card.suit === suit;
+                        }));
+                        return newHand;
+                    });
+                    return;
+                }
+                const newRivalHands = rivalsHands.map(rival => {
+                    if(rival.player === playerChanged.username) {
+                        return { player: rival.player, value: rival.value - cards.length }
+                    }
+                    return rival
+                })
+                updateRivalsHands([...newRivalHands]);
+            }
+            
+        };
+
         const handleTurnChanged = ({ currentPlayer }) => {
             setTurn(currentPlayer);
         };
@@ -148,8 +172,9 @@ export const Home = () => {
         mySocket.on(SocketEvents.ROOM_LEFT, handleRoomLeft);
         mySocket.on(SocketEvents.GAME_STARTED, handleGameStarted);
         mySocket.on(SocketEvents.GAME_FINISHED, handleGameFinished);
-        mySocket.on(SocketEvents.GAME_MOVE, handleGameMove);
+        // mySocket.on(SocketEvents.GAME_MOVE, handleGameMove);
         mySocket.on(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
+        mySocket.on(SocketEvents.CARD_STACKED, handleCardStacked);
         mySocket.on(SocketEvents.TURN_PASSED, handleTurnPassed);
         mySocket.on(SocketEvents.TURN_CHANGED, handleTurnChanged);
         mySocket.on(SocketEvents.SUIT_CHANGED, handleSuitChanged);
@@ -164,8 +189,9 @@ export const Home = () => {
             mySocket.off(SocketEvents.ROOM_LEFT, handleRoomLeft);
             mySocket.off(SocketEvents.GAME_STARTED, handleGameStarted);
             mySocket.off(SocketEvents.GAME_FINISHED, handleGameFinished);
-            mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
+            // mySocket.off(SocketEvents.GAME_MOVE, handleGameMove);
             mySocket.off(SocketEvents.CARD_FROM_PILE, handleCardFromPile);
+            mySocket.off(SocketEvents.CARD_STACKED, handleCardStacked);
             mySocket.off(SocketEvents.TURN_PASSED, handleTurnPassed);
             mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
             mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);

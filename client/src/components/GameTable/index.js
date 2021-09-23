@@ -8,9 +8,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import styles from './index.module.scss';
 import { useRoom } from '../../hooks/useRoom';
+import { SocketEvents } from '../../settings';
 
 const GameTable = () => {
     const {
+        room,
         myHand,
         rivalsHands,
         players,
@@ -44,6 +46,15 @@ const GameTable = () => {
         }
     }, [rivalsHands, players, mySocket, myHand])
 
+    // TODO: Add multiple card support here... 
+    const handleStackCards = (card) => {
+        console.log('Card to stack: ', card);
+        mySocket.emit(SocketEvents.CARD_STACK, { 
+            roomId: room,  
+            cards: [card],
+        })
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.players}>
@@ -76,7 +87,7 @@ const GameTable = () => {
             </div>
             {myPlayer && (<div className={styles.myCards}>
                 <div className={styles.playerHand}>
-                    <Hand cards={myHand}/>
+                    <Hand onCardSelected={handleStackCards} cards={myHand}/>
                     <div className={styles.listItem}>
                         <div>
                             <img

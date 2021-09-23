@@ -6,7 +6,7 @@ import Card from '../Card';
 
 import styles from './index.module.scss';
 
-export const Hand = ({cards, numOfCards}) => {
+export const Hand = ({ cards, numOfCards, onCardSelected }) => {
 
     const displayedCount = numOfCards && numOfCards >= MAX_DISPLAYING_HAND_CARDS 
         ? MAX_DISPLAYING_HAND_CARDS
@@ -17,11 +17,15 @@ export const Hand = ({cards, numOfCards}) => {
     return(
         <div className={styles.hand}>
             {  
-                cards && //if there is a list of cards for a player then numOfCards should be available
+                // If there is a list of cards for a player then numOfCards should be available
+                cards && 
                 cards.map((card, index) => (
-                    <div className={styles.cardsContainer}>
-                        <Card 
-                            key={index}
+                    <div
+                        key={index}
+                        className={styles.cardsContainer}
+                        onClick={() => onCardSelected(card)}
+                    >
+                        <Card
                             isVisible
                             suit={card.suit}
                             value={card.value}
