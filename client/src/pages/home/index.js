@@ -138,15 +138,18 @@ export const Home = () => {
                         }));
                         return newHand;
                     });
-                    return;
+                } else {
+                    const newRivalHands = rivalsHands.map(rival => {
+                        if(rival.player === playerChanged.username) {
+                            return { player: rival.player, value: rival.value - cards.length }
+                        }
+                        return rival
+                    })
+                    updateRivalsHands([...newRivalHands]);
                 }
-                const newRivalHands = rivalsHands.map(rival => {
-                    if(rival.player === playerChanged.username) {
-                        return { player: rival.player, value: rival.value - cards.length }
-                    }
-                    return rival
-                })
-                updateRivalsHands([...newRivalHands]);
+                // Finally, update main card
+                setMainCard(cards.pop());
+
             }
             
         };

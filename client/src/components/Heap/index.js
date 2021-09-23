@@ -2,10 +2,15 @@ import React from 'react';
 
 import Card from '../Card';
 
-const Heap = () => {
+const Heap = ({
+    card
+}) => {
     return(
         <div>
-            <Card suit={"hearts"} value={"A"}/>
+            <Card 
+                suit={card ? card.suit : "hearts"} 
+                value={card ? card.value : "A"}
+            />
         </div>
     );
 }

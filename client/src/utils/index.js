@@ -27,3 +27,34 @@ export const arrayRotate = (arr, count) => {
     arr.push.apply(arr, arr.splice(0, count));
     return arr;
 }
+
+export const getSuggestedMoveIndexes = (playedCard, handCards) => {
+    /*
+    Checks if there is a multi-card move on a player hand
+    Returns the amount of cards with the same value as the one being played and the indexes of said cards
+    */ 
+    const cardIndexes = []
+    // Check if there is another card in hand with the same value
+    handCards.forEach((card, idx) => {
+        if (card.value === playedCard.value && idx !== handCards.indexOf(playedCard)) {
+            // If there is add its index to the array of found cards
+            cardIndexes.push(idx);
+        }
+    })
+    return cardIndexes
+}
+
+export const getSuggestedValidMoveIndexes = (handCards, currentStackCard) => {
+    /*
+    Checks if there is a valid card to stack, based on current stack card.
+    Returns the indexes of said cards
+    */ 
+    const cardIndexes = []
+    handCards.forEach((card, idx) => {
+        if (currentStackCard.value === card.value || currentStackCard.suit === card.suit) {
+            // If there is add its index to the array of found cards
+            cardIndexes.push(idx);
+        }
+    })
+    return cardIndexes;
+}
