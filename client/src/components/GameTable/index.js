@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Hand from '../Hand';
 import Deck from '../Deck';
 import Heap from '../Heap';
+import Modal from '../../components/Modal';
 import { Chat } from '../Chat';
 import { getAvatar, arrayRotate } from '../../utils';
 
@@ -23,6 +24,7 @@ const GameTable = () => {
     // Definition > opponentsHands = [{ cardsCount, player }, ...]
     const [opponentsHands, setOpponentsHands] = useState(undefined)
     const [myPlayer, setMyPlayer] = useState(undefined)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         const myPlayerIdx = players.findIndex(player => player.socketId === mySocket.id);
@@ -50,12 +52,14 @@ const GameTable = () => {
 
     const handleStackCards = (cards) => {
         console.log('Cards to stack: ', cards);
+
         mySocket.emit(SocketEvents.CARD_STACK, { 
             roomId: room,  
             cards,
         })
 
         const isMyTurn = players.indexOf(myPlayer) === currentPlayer
+
         if (myHand.length - cards.length <= 0 && isMyTurn) {
             // Congrats, you win!
             mySocket.emit(SocketEvents.GAME_FINISH, { 
@@ -64,7 +68,19 @@ const GameTable = () => {
             return;
         }
 
-        mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room })
+        if (cards && cards[0].value === "8") {
+            setIsModalOpen(true);
+        } else {
+            mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room })
+        }
+
+    }
+
+    const handleChangeSuit = (suit) => {
+        mySocket.emit(SocketEvents.SUIT_CHANGE, { roomId: room, suit });
+        mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room });
+        setIsModalOpen(false);
+
     }
 
     return (
@@ -123,6 +139,12 @@ const GameTable = () => {
                 </div>
             </div>)} 
             <Chat />
+            <Modal show={isModalOpen}>
+                <button onClick={() => handleChangeSuit("spades")}>♠</button>
+                <button onClick={() => handleChangeSuit("hearts")}>♥</button>
+                <button onClick={() => handleChangeSuit("diamonds")}>♦</button>
+                <button onClick={() => handleChangeSuit("clubs")}>♣</button>
+            </Modal>
         </div>
     );
 };

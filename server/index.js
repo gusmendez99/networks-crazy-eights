@@ -21,6 +21,7 @@ io.on(SocketEvents.CONNECT, (socket) => {
     socket.on(SocketEvents.GAME_FINISH, (data) => gameSockets.finishGame(socket, data));
     socket.on(SocketEvents.TURN_PASS, (data) => gameSockets.passTurn(socket, data));
     socket.on(SocketEvents.TURN_CHANGE, (data) => gameSockets.changeTurn(socket, data));
+    socket.on(SocketEvents.SUIT_CHANGE, (data) => gameSockets.changeSuit(socket, data));
     
 });
 

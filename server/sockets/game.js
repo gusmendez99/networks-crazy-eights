@@ -182,3 +182,28 @@ export const stackCards = (socket, { roomId, cards }) => {
         socket.broadcast.to(roomId).emit(SocketEvents.CARD_STACKED, { playerId, cards }) 
     }
 }
+
+export const changeSuit = (socket, { roomId, suit}) => {
+    console.log(`${socket.id} it going to change current suit to ${suit}.`);
+    const game = findGameById(roomId);
+    if(!game){
+        console.log(`How did ${socket.id} got here?`)
+        const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+        
+    } else {
+        const playerId = socket.id;
+        const response = game.changeSuit(suit);
+    
+        if (!response) {
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on change suit', MessageTypes.ERROR);
+            socket.emit(SocketEvents.MESSAGE, errorMessage);
+            return;
+        }
+
+        // If everything is fine, just send the stacked cards
+        io.to(socket.id).emit(SocketEvents.SUIT_CHANGED, { playerId, cardWithNewSuit: {value: "8", suit} });
+        socket.broadcast.to(roomId).emit(SocketEvents.SUIT_CHANGED, { playerId, cardWithNewSuit: {value: "8", suit} }); 
+    }
+
+}
