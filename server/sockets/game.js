@@ -50,7 +50,7 @@ export const startGame = (socket, { roomId }) => {
 
 export const drawCard = (socket, {roomId}) => {
     console.log(`HEY ${socket.id} WANTS A CARD`)
-    let game = findGameById(roomId)
+    const game = findGameById(roomId)
     if(!game){
         console.log(`How did ${socket.id} got here?`)
         const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
@@ -65,7 +65,7 @@ export const drawCard = (socket, {roomId}) => {
         // const result = io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {card})
         // console.log(result)
     } else {
-        console.log("GOOD TO GO")
+        // console.log("GOOD TO GO")
         const card = game.getCard()
         const playerId = socket.id
         //Send the player the drawn card
@@ -123,3 +123,33 @@ export const passTurn = (socket, { roomId }) => {
         )
     }
 };
+
+export const stackCards = (socket, { roomId, cards }) => {
+    console.log(`${socket.id} wants to stack ${cards.length} cards...`)
+    const game = findGameById(roomId)
+    if(!game){
+        console.log(`How did ${socket.id} got here?`)
+        const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+        
+    } else {
+        const playerId = socket.id
+        const response = game.stackCards(playerId, cards)
+        /* 
+            Send to player the stacked card
+        
+            IMPORTANT: We are using the same event for player & opponents, so we must add validations on React client 
+                        behaviors. Also, we should call the CHANGE_TURN event (after current player receives the
+                        CARD_STACKED event) on our React Client...
+        */
+        if (!response) {
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on stack cards, try again.', MessageTypes.ERROR);
+            socket.emit(SocketEvents.MESSAGE, errorMessage);
+            return;
+        }
+
+        // If everything is fine, just send the stacked cards
+        io.to(socket.id).emit(SocketEvents.CARD_STACKED, { playerId, cards })
+        socket.broadcast.to(roomId).emit(SocketEvents.CARD_STACKED, { playerId, cards }) 
+    }
+}

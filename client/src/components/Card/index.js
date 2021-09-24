@@ -7,26 +7,25 @@ const BACK_CARD = 'back.png'
 
 export const Card = ({
     isVisible = false,
+    isStackable = true,
+    isSuggested = false,
+    isSelected = false,
     suit,
     value,
-    suggested,
 }) => {
     const cardImages = importFolderImages(require.context('../../assets/img/cards', false, /\.(png|jpe?g|svg)$/));
     const suitKey = suit && suit.charAt(0) ? suit.charAt(0).toUpperCase() : undefined;
     const cardKey = !suitKey ? BACK_CARD : `${suitKey}${value}.png`;
-    console.log(suggested)
 
     return(
         <div >
             {
-                isVisible && !suggested &&
-                <div className={styles.card}>
-                    <img alt="card" src={cardImages[cardKey].default} />
-                </div> 
-            }
-            {
-                isVisible && suggested &&
-                <div className={styles.cardSuggested}>
+                isVisible &&
+                <div className={`
+                    ${isSuggested ? styles.cardSuggested : styles.card}
+                    ${isStackable && styles.stackable}
+                    ${isSelected && styles.selected}
+                `}>
                     <img alt="card" src={cardImages[cardKey].default} />
                 </div> 
             }

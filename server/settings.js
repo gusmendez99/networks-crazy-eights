@@ -11,6 +11,8 @@ export const SocketEvents = {
     GAME_FINISHED: 'game_finished',
     CARD_FROM_PILE: 'card_from_pile',
     REQUEST_CARD_FROM_PILE: 'request_card_from_pile',
+    CARD_STACK: 'card_stack',
+    CARD_STACKED: 'card_stacked',
     MESSAGE: 'message',
     DISCONNECT: 'dc',
     SEND_MESSAGE: 'send_message',

@@ -86,21 +86,23 @@ class Game {
         return card;
     }
 
-    stackCard(playerName, card) {
+    stackCards(playerId, cards) {
         /**
         * Given a player name and a list of cards (this list could be single item list)
         * it checks if it is the turn of the player and if so, stack the card(s)
         * on the principal heap.
         * Returns the last card of principal heap
          */
-        if (this.players.findIndex(player => player.username === playerName) === this.currentPlayer) {
-            this.principalHeap.push.apply(this.principalHeap, card);
-            this.cardCount[playerName] -= card.length
-            return this.principalHeap.at(-1); 
+        const playerIdx = this.players.findIndex(player => player.socketId === playerId)
+
+        if (playerIdx !== -1 && playerIdx === this.currentPlayer) {
+            const player = this.players[playerIdx];
+            cards.forEach(card => this.principalHeap.push(card))
+            this.cardCount[player.username] -= cards.length
+            return true; 
         }
 
-        return this.principalHeap.at(-1);
-    
+        return false;
     }
 
     changeTurn() {

@@ -21,6 +21,8 @@ export const SocketEvents = {
     DISCONNECT: 'dc',
     GAME_MOVE: 'game_move',
     TURN_PASS: 'turn_pass',
+    CARD_STACK: 'card_stack',
+    CARD_STACKED: 'card_stacked',
     TURN_PASSED: 'turn_passed',
     TURN_CHANGE: 'turn_change',
     TURN_CHANGED: 'turn_changed',
