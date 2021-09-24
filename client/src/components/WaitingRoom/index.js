@@ -24,7 +24,7 @@ export const WaitingRoom = () => {
                 <span>Room ID: {room}</span>
                 <div className={styles.actions}>
                     {
-                        isOwner && (
+                        isOwner && players && players.length >= 2 && (
                             <button className={styles.btn} onClick={() => startGame()}> Start Game </button>
                         )
                     }

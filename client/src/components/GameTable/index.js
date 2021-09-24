@@ -16,6 +16,7 @@ const GameTable = () => {
         rivalsHands,
         players,
         mySocket,
+        currentPlayer,
         mainCard,
     } = useRoom();
     // Definition > opponentsHands = [{ cardsCount, player }, ...]
@@ -51,8 +52,9 @@ const GameTable = () => {
         console.log('Cards to stack: ', cards);
         mySocket.emit(SocketEvents.CARD_STACK, { 
             roomId: room,  
-            cards: [...cards],
+            cards,
         })
+        mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room })
     }
 
     return (
@@ -65,7 +67,7 @@ const GameTable = () => {
                             <div className={styles.listItem}>
                                 <div>
                                     <img
-                                        className={styles.playerImage}
+                                        className={players.indexOf(player) === currentPlayer ? styles.playerImageActive : styles.playerImage}
                                         src={getAvatar(players.indexOf(player))} 
                                         alt="player"
                                     />
@@ -91,7 +93,7 @@ const GameTable = () => {
                     <div className={styles.listItem}>
                         <div>
                             <img
-                                className={styles.playerImage}
+                                className={players.indexOf(myPlayer) === currentPlayer ? styles.playerImageActive : styles.playerImage}
                                 src={getAvatar(players.indexOf(myPlayer))} 
                                 alt="player"
                             />

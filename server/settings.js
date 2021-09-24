@@ -17,6 +17,10 @@ export const SocketEvents = {
     DISCONNECT: 'dc',
     SEND_MESSAGE: 'send_message',
     MESSAGE_SENT: 'message_sent',
+    TURN_CHANGE: 'turn_change',
+    TURN_CHANGED: 'turn_changed',
+    TURN_PASS: 'turn_pass',
+    TURN_PASSED: 'turn_passed',
     OPPONENT_CARD_FROM_PILE: 'opponent_card_from_pile',
 };
 

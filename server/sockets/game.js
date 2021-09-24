@@ -8,7 +8,6 @@ import { findRoomById } from './rooms.js'
 
 // Runtime persistence
 const availableGames = []
-//GAME MADE WITH THE IDEA OF TESTIG
 export const findGameById = id => availableGames.find(game => game.gameId === id);
 
 export const startGame = (socket, { roomId }) => {
@@ -67,13 +66,68 @@ export const drawCard = (socket, {roomId}) => {
         // console.log(result)
     } else {
         // console.log("GOOD TO GO")
-        const card = game.getCard()
         const playerId = socket.id
-        // Send the player the drawn card
-        io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, { game, card })
-        socket.broadcast.to(roomId).emit(SocketEvents.OPPONENT_CARD_FROM_PILE, { playerId })
+        const card = game.getCard(playerId)
+        if (!card) {
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on draw card, its your turn?.', MessageTypes.ERROR);
+            socket.emit(SocketEvents.MESSAGE, errorMessage);
+            return;
+        }
+        //Send the player the drawn card
+        io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {game,card})
+        socket.broadcast.to(roomId).emit(SocketEvents.OPPONENT_CARD_FROM_PILE, {playerId})
+
+        const limit = game.updateCardLimit(playerId);
+        if(limit[1] === 3){
+            passTurn(socket, { roomId });
+        }
+
+        // changeTurn(socket, { roomId });
     }
 }
+
+//This function should be call after a move ... 
+export const changeTurn = (socket, { roomId }) => { 
+
+    const game = findGameById(roomId);
+
+    if(!game) {
+        const errorMessage = makeMessage(SERVER_NAME, `change turn Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+    } else {
+        //change turn in game state
+        game.resetCardLimit(); // it means that a player stacked a card
+        game.changeTurn();
+        const currentPlayer = game.playerTurn();
+        //send currentPlayer updated and current card
+        game.players.map( player => 
+            io.to(player.socketId).emit(SocketEvents.TURN_CHANGED, { 
+                currentPlayer : currentPlayer, 
+                currentCard: game.principalHeapCard()})
+        )
+    }
+
+};
+
+export const passTurn = (socket, { roomId }) => {
+
+    const game = findGameById(roomId);
+
+    if (!game) {
+        const errorMessage = makeMessage(SERVER_NAME, `change turn Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage); 
+    } else {
+        //passTurn
+        game.resetCardLimit(); // the current player reach the limit so we have to reset it
+        const currentPlayer = game.passTurn();
+        //send currentPlayer updated and current card
+        game.players.map( player => 
+            io.to(player.socketId).emit(SocketEvents.TURN_PASSED, { 
+                currentPlayer : currentPlayer,
+            })
+        )
+    }
+};
 
 export const stackCards = (socket, { roomId, cards }) => {
     console.log(`${socket.id} wants to stack ${cards.length} cards...`)
@@ -94,7 +148,7 @@ export const stackCards = (socket, { roomId, cards }) => {
                         CARD_STACKED event) on our React Client...
         */
         if (!response) {
-            const errorMessage = makeMessage(SERVER_NAME, 'Error on stack cards, try again.', MessageTypes.ERROR);
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on stack cards, its your turn?', MessageTypes.ERROR);
             socket.emit(SocketEvents.MESSAGE, errorMessage);
             return;
         }

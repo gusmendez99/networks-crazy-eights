@@ -25,6 +25,9 @@ export const Home = () => {
         updateRivalsHands,
         setMainCard, 
         setTurn, 
+        turn,
+        setCurrentPlayer,
+        currentPlayer,
         setCurrentSuit, 
         setWinner,
         setChat } = useRoom();
@@ -152,13 +155,20 @@ export const Home = () => {
             }         
         }
 
-        const handleTurnPassed = ({ currentPlayer }) => {
-            setTurn(currentPlayer);
+        const handleTurnPassed = (data) => {
+            setCurrentPlayer(players
+                .findIndex(player => 
+                    player.username === data.currentPlayer));
+            
+            toast.info(`Current player has passed because draw 3 cards, now it's turn for ${data.currentPlayer}`);
             // updateRivalsHand(); not needed because in cardFromPile already updates rivalHands
         };
 
-        const handleTurnChanged = ({ currentPlayer }) => {
-            setTurn(currentPlayer);
+        const handleTurnChanged = (data) => {
+            setCurrentPlayer(players
+                .findIndex(player => 
+                    player.username === data.currentPlayer));
+            
         };
 
         const handleSuitChanged = ({ newSuit }) => {
@@ -203,7 +213,7 @@ export const Home = () => {
             mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
 
         } 
-    }, [mySocket, players, rivalsHands])
+    }, [mySocket, players, rivalsHands, currentPlayer])
 
     return (
         <div className="container">

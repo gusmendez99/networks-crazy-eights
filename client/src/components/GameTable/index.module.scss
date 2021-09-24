@@ -32,6 +32,14 @@
             background-color: #e3e3e3;
             width: 48px;
         }
+
+        .playerImageActive {
+            border-radius: 50%;
+            background-color: #e3e3e3;
+            width: 48px;
+            border: solid;
+            border-color: greenyellow;
+        }
     
         .itemContent {
             margin-left: 20px;
