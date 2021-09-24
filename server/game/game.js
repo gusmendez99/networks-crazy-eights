@@ -25,6 +25,15 @@ class Game {
         this.cardLimit = ["", 0];
     }
 
+    changeSuit(suit) {
+        if(suit) {
+            this.principalHeap.push({value:"8", suit:suit});
+            return true;
+        } else {
+            return false;
+        }
+    
+    }
 
     resetCardLimit() {
         this.cardLimit[0] = "";

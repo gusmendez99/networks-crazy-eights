@@ -23,6 +23,8 @@ export const SocketEvents = {
     TURN_PASS: 'turn_pass',
     TURN_PASSED: 'turn_passed',
     OPPONENT_CARD_FROM_PILE: 'opponent_card_from_pile',
+    SUIT_CHANGE: 'suit_change',
+    SUIT_CHANGED: 'suit_changed',
 };
 
 export const SERVER_NAME = "Server";

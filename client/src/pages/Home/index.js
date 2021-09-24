@@ -164,8 +164,8 @@ export const Home = () => {
             
         };
 
-        const handleSuitChanged = ({ newSuit }) => {
-            setCurrentSuit(newSuit);
+        const handleSuitChanged = ({ cardWithNewSuit }) => {
+            setMainCard(cardWithNewSuit);
         };
 
         const handleMessageReceived = ({ id, message, from, createdAt }) => {
@@ -211,6 +211,7 @@ export const Home = () => {
     return (
         <div className="container">
             <Nav />
+
             {
                 winner ? (
                     <GameEnd />
