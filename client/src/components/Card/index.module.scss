@@ -13,6 +13,12 @@
     &.stackable {
       cursor: pointer;
     }
+
+    &.selected {
+      transform: translateY(-20px);
+      transition: 0.4s ease-out;
+      box-shadow: -1rem 0 2rem rgb(21, 255, 0);
+    }
 }
 .cardSuggested {
   display: flex;

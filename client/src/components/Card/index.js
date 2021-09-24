@@ -9,6 +9,7 @@ export const Card = ({
     isVisible = false,
     isStackable = true,
     isSuggested = false,
+    isSelected = false,
     suit,
     value,
 }) => {
@@ -23,6 +24,7 @@ export const Card = ({
                 <div className={`
                     ${isSuggested ? styles.cardSuggested : styles.card}
                     ${isStackable && styles.stackable}
+                    ${isSelected && styles.selected}
                 `}>
                     <img alt="card" src={cardImages[cardKey].default} />
                 </div> 

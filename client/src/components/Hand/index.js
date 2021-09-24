@@ -12,6 +12,7 @@ export const Hand = ({cards, numOfCards, onCardSelected}) => {
     const { mainCard } = useRoom();
     const [suggestedCardsIndexes, setSuggestedCardsIndexes] = useState([]);
     const [validCardsIndexes, setValidCardsIndexes] = useState([]);
+    const [cardsToStackIndexes, setCardsToStackIndexes] = useState([]);
 
     useEffect(() => {
         const suggestedValidCardsIndexes = (mainCard && cards && cards.length > 0 && getSuggestedValidMoveIndexes(cards, mainCard)) || []
@@ -24,11 +25,42 @@ export const Hand = ({cards, numOfCards, onCardSelected}) => {
     
     const nonDisplayedCount = numOfCards && numOfCards - displayedCount;
 
-    const checkForMoreCards = (card, handCards) => {
-        // console.log("Trying to suggest moves")
-        const suggestedMoveCards = (mainCard && getSuggestedMoveIndexes(card, handCards)) || []
-        setSuggestedCardsIndexes(suggestedMoveCards)
-        console.log("Suggested Move:", suggestedCardsIndexes)
+    const checkForMoreCards = (card) => {
+        const suggestedMoveCardsIdxs = getSuggestedMoveIndexes(card, cards) || []
+        setSuggestedCardsIndexes(suggestedMoveCardsIdxs)
+    }
+
+    const clearSuggestions = () => setSuggestedCardsIndexes([]);
+    
+    const handleSelectedCard = (cardIndex) => {
+
+        const selectedCard = cards[cardIndex];
+        const suggestedMoveCardsIdxs = getSuggestedMoveIndexes(selectedCard, cards) || []
+
+        /* 
+            Case 1: card selected has suggested cards (at least one)
+                    So, we want to append more cards in one move
+        */
+        if (suggestedMoveCardsIdxs.length > 0 ) {
+            
+            // Case A: Card exists in cardsToStack array, so we want to remove it.
+            if (cardsToStackIndexes.includes(cardIndex)) {
+                setCardsToStackIndexes([...cardsToStackIndexes.filter(cardToStackIdx => cardToStackIdx !== cardIndex)]);
+            } else {
+                // Case B: First time player selects the card, so add it to cardsToStack array
+                setCardsToStackIndexes([...cardsToStackIndexes, cardIndex]);
+            }
+            
+        } else {
+            /* 
+                Case 2: we only have one stackable card selected, and has no more suggested cards
+                        So, we just send it throught our socket
+            */
+            
+            const uniqueStackableCard = cards[cardIndex];
+            onCardSelected([uniqueStackableCard])
+        }
+
     }
 
     return(
@@ -37,15 +69,23 @@ export const Hand = ({cards, numOfCards, onCardSelected}) => {
                 // If there is a list of cards for a player then numOfCards should be available
                 cards && 
                 cards.map((card, index) => {
-                    const isValid = validCardsIndexes.includes(index)
-                    const isSuggested = suggestedCardsIndexes.includes(index)
+                    // Card validations
+                    const isValid = validCardsIndexes.includes(index);
+                    const isSuggested = suggestedCardsIndexes.includes(index);
+                    const isSelected = cardsToStackIndexes.includes(index);
+
                     return (
                         <div 
                             key={index}
                             className={styles.cardsContainer}
+                            onMouseEnter={() => {
+                                if (!isValid) return;
+                                checkForMoreCards(card)
+                            }}
+                            onMouseLeave={() => clearSuggestions()}
                             onClick={() => {
                                 if (!isValid) return;
-                                checkForMoreCards(card, cards)
+                                handleSelectedCard(index);
                             }}
                             // onClick={() => onCardSelected(card)}
                         >
@@ -53,6 +93,7 @@ export const Hand = ({cards, numOfCards, onCardSelected}) => {
                                 isVisible
                                 isStackable={isValid}
                                 isSuggested={isSuggested}
+                                isSelected={isSelected}
                                 suit={card.suit}
                                 value={card.value}
                             />

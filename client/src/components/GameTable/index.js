@@ -47,11 +47,11 @@ const GameTable = () => {
     }, [rivalsHands, players, mySocket, myHand, mainCard])
 
     // TODO: Add multiple card support here... 
-    const handleStackCards = (card) => {
-        console.log('Card to stack: ', card);
+    const handleStackCards = (cards) => {
+        console.log('Cards to stack: ', cards);
         mySocket.emit(SocketEvents.CARD_STACK, { 
             roomId: room,  
-            cards: [card],
+            cards: [...cards],
         })
     }
 
