@@ -13,7 +13,7 @@ cd server
 yarn start
 ```
 
-1. Client
+2. Client
 ```
 cd client
 yarn start

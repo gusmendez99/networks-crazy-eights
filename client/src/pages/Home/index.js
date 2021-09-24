@@ -10,6 +10,7 @@ import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents, MessageTypes } from '../../settings';
 import { toast } from 'react-toastify';
 import GameTable from '../../components/GameTable';
+import GameEnd from '../../components/GameEnd';
 //node v: 12.22.3
 
 export const Home = () => {
@@ -25,7 +26,7 @@ export const Home = () => {
         updateRivalsHands,
         setMainCard, 
         setTurn, 
-        turn,
+        winner,
         setCurrentPlayer,
         currentPlayer,
         setCurrentSuit, 
@@ -98,14 +99,6 @@ export const Home = () => {
         const handleGameFinished = ({ winner }) => {
             setWinner(winner);
         };
-        
-        // TODO: Review
-        /* const handleGameMove = ({ game }) => {
-            updateRivalsHands([...game.cardCount]);
-            setMainCard(game.principalHeap.pop());
-            setTurn(game.currentPlayer);
-            setCurrentSuit(game.currentSuit);
-        }; */
 
         const handleCardStacked = ({ playerId, cards }) => {
             const playerChanged = players.find(player => player.socketId === playerId)
@@ -213,19 +206,23 @@ export const Home = () => {
             mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
 
         } 
-    }, [mySocket, players, rivalsHands, currentPlayer])
+    }, [mySocket, players, rivalsHands, currentPlayer, winner])
 
     return (
         <div className="container">
             <Nav />
             {
-                room ? (
-                    myHand ? <GameTable /> : <WaitingRoom />
+                winner ? (
+                    <GameEnd />
                 ) : (
-                    <>
-                        <Registration />
-                        <RoomForm />
-                    </>       
+                    room ? (
+                        myHand ? <GameTable /> : <WaitingRoom />
+                    ) : (
+                        <>
+                            <Registration />
+                            <RoomForm />
+                        </>       
+                    )
                 )
             }
         </div>

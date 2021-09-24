@@ -48,6 +48,30 @@ export const startGame = (socket, { roomId }) => {
     })
 }
 
+export const finishGame = (socket, { roomId }) => {
+    const game = findGameById(roomId)
+    if(!game){
+        console.log(`How did ${socket.id} got here?`)
+        const errorMessage = makeMessage(SERVER_NAME, `Game with ID ${roomId} does not exists, how did you get here?`, MessageTypes.ERROR);
+        socket.emit(SocketEvents.MESSAGE, errorMessage);
+        
+    } else {
+        console.log(`Game with ID ${roomId} has finished successfully! We have a winner...`)
+        const currentPlayer = game.getCurrentPlayerTurn();
+
+        game.players.forEach( player => {        
+            // Notify game players
+            const gameStartedMessage = makeMessage(SERVER_NAME, 'Game has finished!', MessageTypes.SUCCESS)
+            io.to(player.socketId).emit(SocketEvents.MESSAGE, gameStartedMessage);
+
+            io.to(player.socketId).emit(SocketEvents.GAME_FINISHED, {
+                winner: currentPlayer
+            })
+        })
+
+    }
+}
+
 export const drawCard = (socket, {roomId}) => {
     console.log(`HEY ${socket.id} WANTS A CARD`)
     const game = findGameById(roomId)

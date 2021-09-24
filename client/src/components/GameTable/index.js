@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Hand from '../Hand';
 import Deck from '../Deck';
 import Heap from '../Heap';
+import { Chat } from '../Chat';
 import { getAvatar, arrayRotate } from '../../utils';
 
 import styles from './index.module.scss';
@@ -47,13 +48,22 @@ const GameTable = () => {
         }
     }, [rivalsHands, players, mySocket, myHand, mainCard])
 
-    // TODO: Add multiple card support here... 
     const handleStackCards = (cards) => {
         console.log('Cards to stack: ', cards);
         mySocket.emit(SocketEvents.CARD_STACK, { 
             roomId: room,  
             cards,
         })
+
+        const isMyTurn = players.indexOf(myPlayer) === currentPlayer
+        if (myHand.length - cards.length <= 0 && isMyTurn) {
+            // Congrats, you win!
+            mySocket.emit(SocketEvents.GAME_FINISH, { 
+                roomId: room,
+            })
+            return;
+        }
+
         mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room })
     }
 
@@ -112,6 +122,7 @@ const GameTable = () => {
                     </div>
                 </div>
             </div>)} 
+            <Chat />
         </div>
     );
 };

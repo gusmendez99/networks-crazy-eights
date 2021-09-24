@@ -80,6 +80,10 @@ class Game {
         return this.players[this.currentPlayer].username;
     }
 
+    getCurrentPlayerTurn() {
+        return this.players[this.currentPlayer];
+    }
+
     principalHeapCard() {
         const card = this.principalHeap.pop();
         this.principalHeap.push(card);
