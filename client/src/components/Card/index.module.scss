@@ -9,7 +9,16 @@
     transition: 0.4s ease-out;
     position: relative;
     left: 4rem;
-    cursor: pointer;
+
+    &.stackable {
+      cursor: pointer;
+    }
+
+    &.selected {
+      transform: translateY(-20px);
+      transition: 0.4s ease-out;
+      box-shadow: -1rem 0 2rem rgb(21, 255, 0);
+    }
 }
 .cardSuggested {
   display: flex;
@@ -22,7 +31,10 @@
   transition: 0.4s ease-out;
   position: relative;
   left: 4rem;
-  cursor: pointer;
+    
+  &.stackable {
+    cursor: pointer;
+  }
 }
 .cardAdversary {
     display: flex;
@@ -58,20 +70,29 @@
 }
 
 .card:hover {
+
+  &.stackable {
     transform: translateY(-20px);
     transition: 0.4s ease-out;
   }
+}
 
 
-  .card:hover ~ .card {
-    position: relative;
-    left: 50px;
+.card:hover ~ .card {
+  position: relative;
+  left: 50px;
+  transition: 0.4s ease-out;
+
+  &.selected {
+    transform: translateY(-20px);
     transition: 0.4s ease-out;
+    box-shadow: -1rem 0 2rem rgb(21, 255, 0);
   }
+}
 
-  .stroke {
-    stroke: white;
-    stroke-dasharray: 360;
-    stroke-dashoffset: 360;
-    transition: 0.6s ease-out;
-  }
+.stroke {
+  stroke: white;
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  transition: 0.6s ease-out;
+}

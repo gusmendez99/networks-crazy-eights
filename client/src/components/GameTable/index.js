@@ -4,17 +4,19 @@ import Hand from '../Hand';
 import Deck from '../Deck';
 import Heap from '../Heap';
 import { getAvatar, arrayRotate } from '../../utils';
-import { v4 as uuidv4 } from 'uuid';
 
 import styles from './index.module.scss';
 import { useRoom } from '../../hooks/useRoom';
+import { SocketEvents } from '../../settings';
 
 const GameTable = () => {
     const {
+        room,
         myHand,
         rivalsHands,
         players,
         mySocket,
+        mainCard,
     } = useRoom();
     // Definition > opponentsHands = [{ cardsCount, player }, ...]
     const [opponentsHands, setOpponentsHands] = useState(undefined)
@@ -42,7 +44,16 @@ const GameTable = () => {
             setOpponentsHands(orderedCardCounts)
             setMyPlayer(myPlayer);
         }
-    }, [rivalsHands, players, mySocket, myHand])
+    }, [rivalsHands, players, mySocket, myHand, mainCard])
+
+    // TODO: Add multiple card support here... 
+    const handleStackCards = (cards) => {
+        console.log('Cards to stack: ', cards);
+        mySocket.emit(SocketEvents.CARD_STACK, { 
+            roomId: room,  
+            cards: [...cards],
+        })
+    }
 
     return (
         <div className={styles.container}>
@@ -71,12 +82,12 @@ const GameTable = () => {
             <div className={styles.deck}>
                 <div className={styles.deck}>
                     <Deck />
-                    <Heap />
+                    <Heap card={mainCard}/>
                 </div>
             </div>
             {myPlayer && (<div className={styles.myCards}>
                 <div className={styles.playerHand}>
-                    <Hand cards={myHand}/>
+                    <Hand onCardSelected={handleStackCards} cards={myHand}/>
                     <div className={styles.listItem}>
                         <div>
                             <img

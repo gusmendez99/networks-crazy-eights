@@ -37,16 +37,6 @@ Messages format, like action & payload
 
     Response (all): GAME_STARTED, { ...Game, myHand }
 
-- [x] Game Move: 
-  
-        action: GAME_MOVE
-        payload: {
-            cards,
-            roomId,
-        }
-    
-    Response (all): same
-
 - [x] Request card from pile:
 
         action: REQUEST_CARD_FROM_PILE
@@ -81,8 +71,8 @@ Messages format, like action & payload
   
         action: CARD_STACK
         payload: {
-            newCard,
-            currentCard,
+            roomId,
+            cards,
         }
     
     Response (all): CARD_STACKED, same

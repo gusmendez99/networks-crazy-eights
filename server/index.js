@@ -16,7 +16,7 @@ io.on(SocketEvents.CONNECT, (socket) => {
 
     //Game events
     socket.on(SocketEvents.REQUEST_CARD_FROM_PILE, (data)=> gameSockets.drawCard(socket, data));
-    // Game events
+    socket.on(SocketEvents.CARD_STACK, (data)=> gameSockets.stackCards(socket, data));
     socket.on(SocketEvents.GAME_START, (data) => gameSockets.startGame(socket, data));
 });
 

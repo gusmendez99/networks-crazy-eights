@@ -28,18 +28,33 @@ export const arrayRotate = (arr, count) => {
     return arr;
 }
 
-export const suggestMove = (playedCard, handDeck, currentStackCard) => {
+export const getSuggestedMoveIndexes = (playedCard, handCards) => {
     /*
     Checks if there is a multi-card move on a player hand
     Returns the amount of cards with the same value as the one being played and the indexes of said cards
     */ 
-    const indexes_of_cards = []
-    //check if there is another card in hand with the same value
-    for(let i= 0; i < handDeck.length; i ++){
-        if (handDeck[i].value === playedCard.value && i !== handDeck.indexOf(playedCard)) {
-            //if there is add its index to the array of found cards
-            indexes_of_cards.push(i)
+    const cardIndexes = []
+    // Check if there is another card in hand with the same value
+    handCards.forEach((card, idx) => {
+        if (card.value === playedCard.value && idx !== handCards.indexOf(playedCard)) {
+            // If there is add its index to the array of found cards
+            cardIndexes.push(idx);
         }
-    }
-    return [indexes_of_cards.length, indexes_of_cards]
+    })
+    return cardIndexes
+}
+
+export const getSuggestedValidMoveIndexes = (handCards, currentStackCard) => {
+    /*
+    Checks if there is a valid card to stack, based on current stack card.
+    Returns the indexes of said cards
+    */ 
+    const cardIndexes = []
+    handCards.forEach((card, idx) => {
+        if (currentStackCard.value === card.value || currentStackCard.suit === card.suit) {
+            // If there is add its index to the array of found cards
+            cardIndexes.push(idx);
+        }
+    })
+    return cardIndexes;
 }
