@@ -19,6 +19,7 @@ io.on(SocketEvents.CONNECT, (socket) => {
     socket.on(SocketEvents.CARD_STACK, (data)=> gameSockets.stackCards(socket, data));
     socket.on(SocketEvents.GAME_START, (data) => gameSockets.startGame(socket, data));
     socket.on(SocketEvents.TURN_PASS, (data) => gameSockets.passTurn(socket, data));
+    socket.on(SocketEvents.TURN_CHANGE, (data) => gameSockets.changeTurn(socket, data));
     
 });
 

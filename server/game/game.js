@@ -134,16 +134,17 @@ class Game {
         return false
     }
 
-    getCard() {
+    getCard(playerId) {
         /*
         * Draw card from deck 
         * Returns a card or game over if there are no more cards
          */
         if(this.deck.cards.length > 0){
             //add a card to the current player count
-            const currentPlayer = this.playerTurn()
-            //this.cardCount[currentPlayer] += 1
-            return this.deck.card;
+            const playerIdx = this.players.findIndex(player => player.socketId === playerId)
+            if (playerIdx !== -1 && playerIdx === this.currentPlayer) return this.deck.card;
+            // If its not mu turn...
+            return undefined;
         }
 
         this.gameOver();

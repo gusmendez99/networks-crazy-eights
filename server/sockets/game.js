@@ -66,8 +66,13 @@ export const drawCard = (socket, {roomId}) => {
         // console.log(result)
     } else {
         // console.log("GOOD TO GO")
-        const card = game.getCard()
         const playerId = socket.id
+        const card = game.getCard(playerId)
+        if (!card) {
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on draw card, its your turn?.', MessageTypes.ERROR);
+            socket.emit(SocketEvents.MESSAGE, errorMessage);
+            return;
+        }
         //Send the player the drawn card
         io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {game,card})
         socket.broadcast.to(roomId).emit(SocketEvents.OPPONENT_CARD_FROM_PILE, {playerId})
@@ -118,8 +123,8 @@ export const passTurn = (socket, { roomId }) => {
         //send currentPlayer updated and current card
         game.players.map( player => 
             io.to(player.socketId).emit(SocketEvents.TURN_PASSED, { 
-                currentPlayer : currentPlayer, 
-                currentCard: game.principalHeapCard()})
+                currentPlayer : currentPlayer,
+            })
         )
     }
 };
@@ -143,7 +148,7 @@ export const stackCards = (socket, { roomId, cards }) => {
                         CARD_STACKED event) on our React Client...
         */
         if (!response) {
-            const errorMessage = makeMessage(SERVER_NAME, 'Error on stack cards, try again.', MessageTypes.ERROR);
+            const errorMessage = makeMessage(SERVER_NAME, 'Error on stack cards, its your turn?', MessageTypes.ERROR);
             socket.emit(SocketEvents.MESSAGE, errorMessage);
             return;
         }

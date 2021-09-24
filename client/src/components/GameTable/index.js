@@ -52,8 +52,9 @@ const GameTable = () => {
         console.log('Cards to stack: ', cards);
         mySocket.emit(SocketEvents.CARD_STACK, { 
             roomId: room,  
-            cards: [...cards],
+            cards,
         })
+        mySocket.emit(SocketEvents.TURN_CHANGE, { roomId: room })
     }
 
     return (
