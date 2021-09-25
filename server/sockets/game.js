@@ -88,6 +88,8 @@ export const drawCard = (socket, {roomId}) => {
         // console.log(card)
         // const result = io.to(socket.id).emit(SocketEvents.CARD_FROM_PILE, {card})
         // console.log(result)
+
+        
     } else {
         // console.log("GOOD TO GO")
         const playerId = socket.id

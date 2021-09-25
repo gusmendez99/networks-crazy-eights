@@ -154,6 +154,15 @@ class Game {
          */
         if(this.deck.cards.length > 0){
             //add a card to the current player count
+
+            const playerIdx = this.players.findIndex(player => player.socketId === playerId)
+            if (playerIdx !== -1 && playerIdx === this.currentPlayer) return this.deck.card;
+            // If its not mu turn...
+            return undefined;
+        } else {
+            //init a new Deck
+            this.deck.buildDeck();
+            this.deck.scrambleCards();
             const playerIdx = this.players.findIndex(player => player.socketId === playerId)
             if (playerIdx !== -1 && playerIdx === this.currentPlayer) return this.deck.card;
             // If its not mu turn...
