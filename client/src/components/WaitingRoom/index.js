@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRoom } from '../../hooks/useRoom';
 import { SocketEvents } from '../../settings';
 import { getAvatar } from '../../utils';
 import { Chat } from '../Chat';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import styles from './waitingRoom.module.scss';
 
 export const WaitingRoom = () => {
     const { mySocket, room, isOwner, players } = useRoom();
+    const [copied, setCopied] = useState(false);
 
     const leaveRoom = () => {
         mySocket.emit(SocketEvents.ROOM_LEAVE, { roomId: room })
@@ -22,6 +24,10 @@ export const WaitingRoom = () => {
             <div className={styles.waitingRoom}>
                 <h1>Waiting Room</h1>
                 <span>Room ID: {room}</span>
+                <CopyToClipboard text={room}
+                    onCopy={() => setCopied(true)}>
+                    <button className={styles.copyBtn}>{copied ? "Copied!" : "Copy"}</button>
+                </CopyToClipboard>
                 <div className={styles.actions}>
                     {
                         isOwner && players && players.length >= 2 && (
