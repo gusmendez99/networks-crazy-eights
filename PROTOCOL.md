@@ -3,9 +3,7 @@ Messages format, like action & payload
 
 ## Events & Payloads:
 
-
-
-- [x] Create or Join Room: 
+- [x] **Create or Join Room:** 
   
         action: ROOM_CREATE_OR_JOIN
         payload: {
@@ -15,10 +13,10 @@ Messages format, like action & payload
             rounds,
         }
 
-    Response: ROOM_CREATED, { roomId, username }
+    Response: ROOM_CREATED, { roomId }
     Response: ROOM_PLAYERS, { roomId, players, ownerId }
 
-- [x] Leave Room: 
+- [x] **Leave Room:** 
   
         action: ROOM_LEAVE
         payload: {
@@ -28,46 +26,54 @@ Messages format, like action & payload
     Response: ROOM_LEFT, { roomId, username }
     Response: ROOM_PLAYERS, { roomId, players, ownerId }
 
-- [x] Start Game: 
+- [x] **Start Game:** 
   
         action: GAME_START
         payload: {
             roomId
         }
 
-    Response (all): GAME_STARTED, { ...Game, myHand }
+    Response (all): GAME_STARTED, { ...Game, hand }
 
-- [x] Request card from pile:
+- [x] **Request card from pile:**
 
-        action: REQUEST_CARD_FROM_PILE
+        action: CARD_FROM_PILE
         payload: {
          roomId   
         }
-    Response: CARD_FROM_PILE, { card }
+    Response: CARD_FROM_PILE, { Game, card }
+    Response: OPPONENT_CARD_FROM_PILE, { playerId }
 
-
-- [x] Pass Turn: 
+- [x] **Game Finished:**
   
-        action: PASS_TURN
+        action: GAME_FINISHED
         payload: {
-            currentPlayer,
-            currentCard,
+            roomId,
         }
     
-    Response (all): TURN_PASSED, same
+    Response (all): GAME_FINISHED, { winner }
 
 
-- [x] Change Turn: 
+- [x] **Pass Turn:** 
+  
+        action: TURN_PASS,
+        payload: {
+            roomId,
+        }
+    
+    Response (all): TURN_PASSED, { currentPlayer }
+
+
+- [x] **Change Turn:** 
   
         action: TURN_CHANGE
         payload: {
-            currentPlayer,
-            currentCard,
+            roomId
         }
     
-    Response (all): TURN_CHANGED, same
+    Response (all): TURN_CHANGED, { currentPlayer, currentCard }
 
-- [x] Stack Card: 
+- [x] **Stack Card:** 
   
         action: CARD_STACK
         payload: {
@@ -75,41 +81,49 @@ Messages format, like action & payload
             cards,
         }
     
-    Response (all): CARD_STACKED, same
+    Response (all): CARD_STACKED, { playerId, cards }
 
-- [x] Change Suit: 
+- [x] **Change Suit:** 
   
         action: ALERT_SUIT_CHANGE
         payload: {
-            newSuit
+            roomId,
+            suit,
         }
     
-    Response (all): SUIT_CHANGED, same
+    Response (all): SUIT_CHANGED, { playerId, cadWithNewSuit }
 
-- [x] Game Finished: 
-  
-        action: GAME_FINISHED
-        payload: {
-            winner,
-        }
-    
-    Response (all): same (winner can be null)
-
-- [x] Chat Sent:
+- [x] **Chat Sent:**
 
         action: SEND_MESSAGE
         payload: {
-            nickname,
             roomId,
+            from,
             message,
         }
     
-    Response (all): MESSAGE_SENT, same
+    Response (all): MESSAGE_SENT, { id, message, from, createdAt}
 
-- [x] Error:
+- [x] **Error/Info:**
 
-        action: ERROR
+        action: MESSAGE,
         payload: {
-            errorDescription,
-            errorCode
+            sender,
+            content,
+            type,
+            time,
         }
+
+- [x] **Send players in a room from server:**
+
+        action: ROOM_PLAYERS, 
+        payload: {
+            roomId,
+            players,
+            ownerId
+        }
+
+- [x] **Send disconnect alert:**
+
+        action: DISCONNECT,
+
