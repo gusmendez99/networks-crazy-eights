@@ -1,4 +1,5 @@
-export const HOST = 'http://127.0.0.1:4000'
+// export const HOST = 'http://127.0.0.1:4000'
+export const HOST = 'https://stormy-atoll-70449.herokuapp.com/'
 export const TIMEOUT = 60000;
 export const DEFAULT_ROUNDS = 1;
 export const MAX_PLAYERS = 4;
