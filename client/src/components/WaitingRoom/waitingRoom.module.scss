@@ -103,3 +103,7 @@
     @include btn(green);
 }
 
+.copyBtn {
+    @include btn($color3);
+
+}
