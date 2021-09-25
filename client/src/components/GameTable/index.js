@@ -43,6 +43,7 @@ const GameTable = () => {
                         cardsCount
                     }
                 }
+                return undefined
             }).filter(val => val !== undefined)) || undefined
             // console.log('Ordered: ', orderedCardCounts)
             setOpponentsHands(orderedCardCounts)

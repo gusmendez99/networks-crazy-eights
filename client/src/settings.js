@@ -33,7 +33,6 @@ export const SocketEvents = {
     MESSAGE_SENT: 'message_sent',
     OPPONENT_CARD_FROM_PILE: 'opponent_card_from_pile',
     SUIT_CHANGE: 'suit_change',
-    SUIT_CHANGED: 'suit_changed',
 };
 
 

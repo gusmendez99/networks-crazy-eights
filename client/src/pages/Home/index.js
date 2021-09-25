@@ -203,10 +203,16 @@ export const Home = () => {
             mySocket.off(SocketEvents.TURN_CHANGED, handleTurnChanged);
             mySocket.off(SocketEvents.SUIT_CHANGED, handleSuitChanged);
             mySocket.off(SocketEvents.MESSAGE_SENT, handleMessageReceived);
-            mySocket.on(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
+            mySocket.off(SocketEvents.OPPONENT_CARD_FROM_PILE, handleOpponentCardFromPile);
 
         } 
-    }, [mySocket, players, rivalsHands, currentPlayer, winner])
+    }, [
+        mySocket, players, rivalsHands, currentPlayer, winner,
+        setChat, setCurrentPlayer, setCurrentSuit, setIsOwner,
+        setMainCard, setPlayers, setRoom, setTurn, setWinner, 
+        updateMyHand, updateRivalsHands,
+    ])
+    // [mySocket, players, rivalsHands, currentPlayer, winner])
 
     return (
         <div className="container">

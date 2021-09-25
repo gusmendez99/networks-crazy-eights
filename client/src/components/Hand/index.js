@@ -78,9 +78,9 @@ export const Hand = ({cards, numOfCards, onCardSelected}) => {
                         So, we just send it throught our socket
             */
             //console.log('Stacking card: ', uniqueStackableCard)
-            const uniqueStackableCard = cards[cardIndex];
+            const singleStackableCard = cards[cardIndex];
             setCardsToStackIndexes([])
-            onCardSelected([uniqueStackableCard])
+            onCardSelected([singleStackableCard])
         }
 
     }
